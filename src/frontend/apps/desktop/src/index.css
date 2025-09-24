@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* MetaStation Brand Colors */
+    --brand-primary: 45 100% 50%;
+    --brand-background: 45 8% 5%;
+    --brand-secondary: 267 100% 25%;
+    --brand-text-light: 240 100% 99%;
+    --brand-text-dark: 0 0% 0%;
+
+    /* Surface colors for cards and components */
+    --brand-surface: 45 8% 8%;
+    --brand-surface-hover: 45 8% 12%;
+    --brand-border: 45 8% 15%;
+    --brand-input-bg: 45 8% 10%;
+
+    /* Theme mapping */
+    --background: 45 8% 5%;
+    --foreground: 240 100% 99%;
+
+    --card: 45 8% 8%;
+    --card-foreground: 240 100% 99%;
+
+    --popover: 45 8% 8%;
+    --popover-foreground: 240 100% 99%;
+
+    --primary: 45 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 267 100% 25%;
+    --secondary-foreground: 240 100% 99%;
+
+    --muted: 45 8% 12%;
+    --muted-foreground: 45 15% 65%;
+
+    --accent: 45 100% 50%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 240 100% 99%;
+
+    --border: 45 8% 15%;
+    --input: 45 8% 10%;
+    --ring: 45 100% 50%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 45 8% 6%;
+    --sidebar-foreground: 240 100% 99%;
+    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 45 8% 12%;
+    --sidebar-accent-foreground: 240 100% 99%;
+    --sidebar-border: 45 8% 15%;
+    --sidebar-ring: 45 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Para navegadores WebKit (Chrome, Edge, Electron) */
+::-webkit-scrollbar {
+  width: 10px;
+  /* largura da barra */
+}
+
+::-webkit-scrollbar-track {
+  background: #22221f;
+  /* cor do fundo da barra */
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #ffa909;
+  /* cor do "dedo" da barra */
+  border-radius: 5px;
+  border: 2px solid #1d1d1b;
+  /* espaço entre o "dedo" e o track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #f7b538;
+  /* cor ao passar o mouse */
+}
