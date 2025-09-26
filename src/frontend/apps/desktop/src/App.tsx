@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AppSidebar } from "@/components/AppSidebar";
 import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
@@ -23,14 +23,15 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/*" element={
+          <Route path="/app/*" element={
             <SidebarProvider>
               <div className="flex min-h-screen w-full">
                 <AppSidebar />
                 <main className="flex-1 overflow-auto">
                   <Routes>
-                    <Route path="/" element={<Homepage />} />
+                    <Route path="/homepage" element={<Homepage />} />
                     <Route path="/meus-cursos" element={<MeusCursos />} />
                     <Route path="/marketplace" element={<Marketplace />} />
                     <Route path="/simulador-3d" element={<Simulador3D />} />

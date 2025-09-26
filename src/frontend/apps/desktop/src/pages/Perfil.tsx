@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,6 +32,41 @@ export default function Perfil() {
     joinDate: "Janeiro 2024"
   });
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      console.log("Token nao encontrado na home page, voltando para o login")
+      navigate("/login")
+      return
+    }
+
+    fetch("http://192.168.0.203:8080/metabee/user/auth/validate", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Token inválido ou expirado")
+        }
+
+        const contentType = res.headers.get("content-type")
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json()
+          console.log("Token válido:", data)
+        } else {
+          throw new Error("Resposta não é JSON")
+        }
+      })
+      .catch((err) => {
+        console.error("Erro na validação do token:", err.message)
+        navigate("/login")
+      })
+  }, [])
+
   const handleSave = () => {
     toast.success("Perfil atualizado com sucesso!");
   };
@@ -40,7 +76,7 @@ export default function Perfil() {
       {/* Header */}
       <div className="space-y-6">
         <h1 className="text-3xl font-bold text-foreground">Meu Perfil</h1>
-        
+
         {/* Profile Card */}
         <Card className="bg-brand-surface border-brand-border">
           <CardContent className="p-6">
@@ -59,7 +95,7 @@ export default function Perfil() {
                   <Camera className="h-4 w-4" />
                 </Button>
               </div>
-              
+
               <div className="flex-1 space-y-2">
                 <div className="flex items-center gap-3">
                   <h2 className="text-2xl font-bold text-foreground">{profileData.name}</h2>
@@ -121,7 +157,7 @@ export default function Perfil() {
                   <Input
                     id="name"
                     value={profileData.name}
-                    onChange={(e) => setProfileData({...profileData, name: e.target.value})}
+                    onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                     className="bg-brand-input-bg border-brand-border"
                   />
                 </div>
@@ -131,33 +167,33 @@ export default function Perfil() {
                     id="email"
                     type="email"
                     value={profileData.email}
-                    onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+                    onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                     className="bg-brand-input-bg border-brand-border"
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="location">Localização</Label>
                 <Input
                   id="location"
                   value={profileData.location}
-                  onChange={(e) => setProfileData({...profileData, location: e.target.value})}
+                  onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
                   className="bg-brand-input-bg border-brand-border"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="bio">Biografia</Label>
                 <Textarea
                   id="bio"
                   value={profileData.bio}
-                  onChange={(e) => setProfileData({...profileData, bio: e.target.value})}
+                  onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
                   className="bg-brand-input-bg border-brand-border min-h-[100px]"
                   placeholder="Conte um pouco sobre você..."
                 />
               </div>
-              
+
               <Button onClick={handleSave} className="w-full sm:w-auto">
                 Salvar Alterações
               </Button>
@@ -203,7 +239,7 @@ export default function Perfil() {
                   </div>
                   <Button variant="outline" size="sm">Configurar</Button>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Notificações por Email</h3>
@@ -211,7 +247,7 @@ export default function Perfil() {
                   </div>
                   <Button variant="outline" size="sm">Configurar</Button>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Dados de Uso</h3>

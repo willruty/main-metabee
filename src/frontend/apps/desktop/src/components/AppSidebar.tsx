@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { 
-  Home, 
-  BookOpen, 
-  ShoppingCart, 
-  Box, 
-  User, 
+import {
+  Home,
+  BookOpen,
+  ShoppingCart,
+  Box,
+  User,
   Settings,
   ChevronRight,
-  Brain
+  Brain,
+  CloudDownload
 } from "lucide-react";
 import {
   Sidebar,
@@ -21,16 +22,17 @@ import {
 } from "@/components/ui/sidebar";
 
 const mainItems = [
-  { title: "Homepage", url: "/", icon: Home },
-  { title: "Meus Cursos", url: "/meus-cursos", icon: BookOpen },
-  { title: "Marketplace", url: "/marketplace", icon: ShoppingCart },
-  { title: "Simulador 3D", url: "/simulador-3d", icon: Box },
-  { title: "Inteligência Artificial", url: "/chat-ia", icon: Brain },
+  { title: "Homepage", url: "/app/homepage", icon: Home },
+  { title: "Meus Cursos", url: "/app/meus-cursos", icon: BookOpen },
+  { title: "Marketplace", url: "/app/marketplace", icon: ShoppingCart },
+  { title: "Simulador 3D", url: "/app/simulador-3d", icon: Box },
+  { title: "Inteligência Artificial", url: "/app/chat-ia", icon: Brain },
+  { title: "Downloads", url: "/app/downloads", icon: CloudDownload },
 ];
 
 const bottomItems = [
-  { title: "Perfil", url: "/perfil", icon: User },
-  { title: "Configurações", url: "/configuracoes", icon: Settings },
+  { title: "Perfil", url: "/app/perfil", icon: User },
+  { title: "Configurações", url: "/app/configuracoes", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -92,10 +94,9 @@ export function AppSidebar() {
                       <NavLink
                         to={item.url}
                         className={({ isActive }) =>
-                          `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                            isActive
-                              ? "bg-primary text-primary-foreground"
-                              : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                          `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${isActive
+                            ? "bg-primary text-primary-foreground"
+                            : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           }`
                         }
                       >
@@ -126,10 +127,9 @@ export function AppSidebar() {
                       <NavLink
                         to={item.url}
                         className={({ isActive }) =>
-                          `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                            isActive
-                              ? "bg-primary text-primary-foreground"
-                              : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                          `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${isActive
+                            ? "bg-primary text-primary-foreground"
+                            : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                           }`
                         }
                       >

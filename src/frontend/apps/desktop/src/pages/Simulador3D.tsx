@@ -1,13 +1,15 @@
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Play, 
-  Pause, 
-  RotateCcw, 
-  Settings, 
-  Maximize, 
+import {
+  Play,
+  Pause,
+  RotateCcw,
+  Settings,
+  Maximize,
   Download,
   Cpu,
   Zap,
@@ -34,6 +36,41 @@ export default function Simulador3D() {
     setIsSimulating(!isSimulating);
   };
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      console.log("Token nao encontrado na home page, voltando para o login")
+      navigate("/login")
+      return
+    }
+
+    fetch("http://192.168.0.203:8080/metabee/user/auth/validate", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Token inválido ou expirado")
+        }
+
+        const contentType = res.headers.get("content-type")
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json()
+          console.log("Token válido:", data)
+        } else {
+          throw new Error("Resposta não é JSON")
+        }
+      })
+      .catch((err) => {
+        console.error("Erro na validação do token:", err.message)
+        navigate("/login")
+      })
+  }, [])
+
   return (
     <div className="p-6 space-y-6 max-w-7xl mx-auto">
       {/* Header */}
@@ -44,7 +81,7 @@ export default function Simulador3D() {
             Teste e programe robôs em ambiente virtual
           </p>
         </div>
-        
+
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm">
             <Download className="h-4 w-4 mr-2" />
@@ -83,17 +120,17 @@ export default function Simulador3D() {
                   </>
                 )}
               </Button>
-              
+
               <Button variant="outline" size="sm">
                 <RotateCcw className="h-4 w-4 mr-2" />
                 Reset
               </Button>
-              
+
               <Badge variant={isSimulating ? "default" : "secondary"}>
                 {isSimulating ? "Simulando" : "Parado"}
               </Badge>
             </div>
-            
+
             <div className="text-sm text-muted-foreground">
               Modelo: <span className="text-foreground font-medium">{selectedRobot.name}</span>
             </div>
@@ -105,9 +142,9 @@ export default function Simulador3D() {
               <div className="aspect-video bg-gradient-to-br from-brand-input-bg to-brand-surface rounded-lg flex items-center justify-center relative overflow-hidden">
                 {/* 3D Canvas Placeholder */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5" />
-                
+
                 {/* Grid Pattern */}
-                <div 
+                <div
                   className="absolute inset-0 opacity-20"
                   style={{
                     backgroundImage: `
@@ -117,7 +154,7 @@ export default function Simulador3D() {
                     backgroundSize: '50px 50px'
                   }}
                 />
-                
+
                 {/* Robot Model Placeholder */}
                 <div className="relative z-10 text-center">
                   <div className="w-32 h-32 bg-primary/20 rounded-full flex items-center justify-center mb-4 mx-auto animate-pulse">
@@ -160,19 +197,18 @@ export default function Simulador3D() {
               {robotModels.map((robot) => (
                 <div
                   key={robot.id}
-                  className={`p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedRobot.id === robot.id
-                      ? "border-primary bg-primary/10"
-                      : "border-brand-border hover:border-primary/50"
-                  } ${robot.status === 'locked' ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`p-3 rounded-lg border cursor-pointer transition-colors ${selectedRobot.id === robot.id
+                    ? "border-primary bg-primary/10"
+                    : "border-brand-border hover:border-primary/50"
+                    } ${robot.status === 'locked' ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={() => robot.status !== 'locked' && setSelectedRobot(robot)}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-foreground">{robot.name}</span>
-                    <Badge 
+                    <Badge
                       variant={
-                        robot.status === 'active' ? 'default' : 
-                        robot.status === 'available' ? 'secondary' : 'outline'
+                        robot.status === 'active' ? 'default' :
+                          robot.status === 'available' ? 'secondary' : 'outline'
                       }
                       className="text-xs"
                     >

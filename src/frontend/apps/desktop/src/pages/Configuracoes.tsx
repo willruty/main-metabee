@@ -1,18 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { 
-  Bell, 
-  Shield, 
-  Palette, 
-  Volume2, 
-  Download, 
+import {
+  Bell,
+  Shield,
+  Palette,
+  Volume2,
+  Download,
   Trash2,
   HardDrive,
   Wifi,
@@ -58,6 +58,41 @@ export default function Configuracoes() {
   const clearCache = () => {
     toast.success("Cache limpo com sucesso!");
   };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      console.log("Token nao encontrado na home page, voltando para o login")
+      navigate("/login")
+      return
+    }
+
+    fetch("http://192.168.0.203:8080/metabee/user/auth/validate", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Token inválido ou expirado")
+        }
+
+        const contentType = res.headers.get("content-type")
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json()
+          console.log("Token válido:", data)
+        } else {
+          throw new Error("Resposta não é JSON")
+        }
+      })
+      .catch((err) => {
+        console.error("Erro na validação do token:", err.message)
+        navigate("/login")
+      })
+  }, [])
 
   return (
     <div className="p-6 space-y-8 max-w-4xl mx-auto">
@@ -119,7 +154,7 @@ export default function Configuracoes() {
                     }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Novos Cursos</h3>
@@ -135,7 +170,7 @@ export default function Configuracoes() {
                     }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Conquistas</h3>
@@ -151,7 +186,7 @@ export default function Configuracoes() {
                     }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Resumo por Email</h3>
@@ -197,7 +232,7 @@ export default function Configuracoes() {
                     }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Progresso Visível</h3>
@@ -213,7 +248,7 @@ export default function Configuracoes() {
                     }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Analytics</h3>
@@ -257,7 +292,7 @@ export default function Configuracoes() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Idioma</Label>
                   <Select value={settings.appearance.language}>
@@ -272,7 +307,7 @@ export default function Configuracoes() {
                   </Select>
                 </div>
               </div>
-              
+
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label>Tamanho da Fonte: {settings.appearance.fontSize[0]}px</Label>
@@ -290,7 +325,7 @@ export default function Configuracoes() {
                     className="w-full"
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Animações</h3>
@@ -337,7 +372,7 @@ export default function Configuracoes() {
                     className="w-full"
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Efeitos Sonoros</h3>
@@ -353,7 +388,7 @@ export default function Configuracoes() {
                     }
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Narração de Voz</h3>
@@ -394,7 +429,7 @@ export default function Configuracoes() {
                     Limpar Cache
                   </Button>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label>Qualidade de Download</Label>
                   <Select value={settings.storage.downloadQuality}>
@@ -408,7 +443,7 @@ export default function Configuracoes() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-medium text-foreground">Download Automático</h3>

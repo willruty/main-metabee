@@ -7,27 +7,54 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { toast } from "sonner";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!username.trim() || !password.trim()) {
+
+    if (!email.trim() || !password.trim()) {
       toast.error("Por favor, preencha todos os campos");
       return;
     }
 
-    setIsLoading(true);
-    
-    // Simulate login process
-    setTimeout(() => {
-      toast.success("Login realizado com sucesso!");
-      navigate("/");
-      setIsLoading(false);
-    }, 1000);
+    const endpoint = "http://192.168.0.203:8080/metabee/login";
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        let errorMessage = `Erro: ${response.status} ${response.statusText}`;
+        try {
+          const errorData = await response.json();
+          if (errorData?.message) {
+            errorMessage = errorData.message;
+          }
+        } catch (err) {
+          // caso não seja JSON, mantém a mensagem padrão
+        }
+        throw new Error(errorMessage);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        toast.success("Login realizado com sucesso!");
+        localStorage.setItem("token", data.token);
+        navigate("/app/homepage");
+      } else {
+        toast.error("Resposta inesperada do servidor.");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Erro no login, tente novamente");
+    }
   };
 
   return (
@@ -46,24 +73,24 @@ export default function Login() {
             Plataforma de Estudos da Metabee
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="username" className="text-foreground">
-                Usuário
+                Email
               </Label>
               <Input
                 id="username"
                 type="text"
-                placeholder="Digite seu usuário"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Digite seu email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-brand-input-bg border-brand-border text-foreground placeholder:text-muted-foreground focus:border-primary"
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password" className="text-foreground">
                 Senha
@@ -78,13 +105,13 @@ export default function Login() {
                 required
               />
             </div>
-            
-            <Button 
-              type="submit" 
+
+            <Button
+              type="submit"
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-2.5"
-              disabled={isLoading}
+              onSubmit={(e) => handleSubmit(e)}
             >
-              {isLoading ? "Entrando..." : "Entrar"}
+              Entrar
             </Button>
           </form>
         </CardContent>

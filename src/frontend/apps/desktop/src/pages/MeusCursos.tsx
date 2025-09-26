@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { CourseCard } from "@/components/CourseCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,6 +54,39 @@ const myCourses = [
 export default function MeusCursos() {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      console.log("Token nao encontrado na home page, voltando para o login")
+      navigate("/login")
+      return
+    }
+
+    fetch("http://192.168.0.203:8080/metabee/user/auth/validate", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Token inválido ou expirado")
+        }
+
+        const contentType = res.headers.get("content-type")
+        if (contentType && contentType.includes("application/json")) {
+          const data = await res.json()
+          console.log("Token válido:", data)
+        } else {
+          throw new Error("Resposta não é JSON")
+        }
+      })
+      .catch((err) => {
+        console.error("Erro na validação do token:", err.message)
+        navigate("/login")
+      })
+  }, [])
+
   const handleBuyMore = () => {
     navigate("/marketplace");
   };
@@ -68,7 +102,7 @@ export default function MeusCursos() {
               Continue sua jornada de aprendizado • {myCourses.length} cursos ativos
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -110,7 +144,7 @@ export default function MeusCursos() {
             onAction={() => console.log(`Continue course ${course.id}`)}
           />
         ))}
-        
+
         {/* Buy More Card */}
         <CourseCard
           id={0}

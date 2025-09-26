@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
     strictPort: true,
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
-  base: '/metabee-learnflow/',
+  base: '/',
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
