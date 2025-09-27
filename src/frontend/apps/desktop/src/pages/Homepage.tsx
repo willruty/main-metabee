@@ -162,7 +162,7 @@ export default function Homepage() {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <Button variant="secondary" size="sm">
+                    <Button variant="secondary" size="sm" onClick={() => navigate("/app/aula")}>
                       Continuar
                     </Button>
                   </div>
@@ -175,7 +175,7 @@ export default function Homepage() {
           <Card className="bg-brand-surface border-brand-border">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-foreground">Novos Cursos</CardTitle>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => navigate("/app/marketplace")}>
                 Ver Todos
               </Button>
             </CardHeader>
@@ -185,7 +185,7 @@ export default function Homepage() {
                   <CourseCard
                     key={course.id}
                     {...course}
-                    duration="12h"
+                    duration="18h"
                     students={89}
                   />
                 ))}
@@ -224,7 +224,7 @@ export default function Homepage() {
               <p className="text-sm text-muted-foreground mb-4">
                 Descubra nossa biblioteca completa de cursos de robótica
               </p>
-              <Button className="w-full">
+              <Button className="w-full" onClick={() => navigate("/app/marketplace")}>
                 Ir para Marketplace
               </Button>
             </CardContent>

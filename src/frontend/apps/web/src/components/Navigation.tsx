@@ -10,7 +10,6 @@ const Navigation = () => {
     { name: "Cursos", href: "/#courses" },
     { name: "Preços", href: "/#pricing" },
     { name: "Sobre", href: "/#about" },
-    { name: "Blog", href: "/blog" },
   ];
 
   return (

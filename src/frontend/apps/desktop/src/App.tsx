@@ -8,11 +8,19 @@ import { AppSidebar } from "@/components/AppSidebar";
 import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
 import MeusCursos from "./pages/MeusCursos";
+import Modulos from "./pages/Modulos";
+import Aula from "./pages/Aula";
 import Marketplace from "./pages/Marketplace";
+import Noticias from "./pages/Noticias";
+import Materia from "./pages/Materia";
 import Simulador3D from "./pages/Simulador3D";
+import ChatIa from "./pages/ChatIa";
+import Downloads from "./pages/Downloads";
 import Perfil from "./pages/Perfil";
 import Configuracoes from "./pages/Configuracoes";
 import NotFound from "./pages/NotFound";
+import VisaoGeralCurso from "./pages/VisaoGeralCurso";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -33,8 +41,16 @@ const App = () => (
                   <Routes>
                     <Route path="/homepage" element={<Homepage />} />
                     <Route path="/meus-cursos" element={<MeusCursos />} />
+                    <Route path="/visao-geral" element={<Modulos />} />
+                    <Route path="/aula" element={<Aula />} />
                     <Route path="/marketplace" element={<Marketplace />} />
+                    <Route path="/noticias" element={<Noticias />} />
+                    <Route path="/materia" element={<Materia />} />
                     <Route path="/simulador-3d" element={<Simulador3D />} />
+                    <Route path="/ia" element={<ChatIa />} />
+                    <Route path="/downloads" element={<Downloads />} />
+                    <Route path="/visao-geral-curso" element={<VisaoGeralCurso />} />
+                    <Route path="/checkout" element={<Checkout />} />
                     <Route path="/perfil" element={<Perfil />} />
                     <Route path="/configuracoes" element={<Configuracoes />} />
                     <Route path="*" element={<NotFound />} />

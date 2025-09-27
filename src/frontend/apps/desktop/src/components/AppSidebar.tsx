@@ -9,6 +9,7 @@ import {
   Settings,
   ChevronRight,
   Brain,
+  Newspaper,
   CloudDownload
 } from "lucide-react";
 import {
@@ -25,8 +26,9 @@ const mainItems = [
   { title: "Homepage", url: "/app/homepage", icon: Home },
   { title: "Meus Cursos", url: "/app/meus-cursos", icon: BookOpen },
   { title: "Marketplace", url: "/app/marketplace", icon: ShoppingCart },
+  { title: "Noticias", url: "/app/noticias", icon: Newspaper },
   { title: "Simulador 3D", url: "/app/simulador-3d", icon: Box },
-  { title: "Inteligência Artificial", url: "/app/chat-ia", icon: Brain },
+  { title: "Inteligência Artificial", url: "/app/ia", icon: Brain },
   { title: "Downloads", url: "/app/downloads", icon: CloudDownload },
 ];
 

@@ -141,7 +141,7 @@ export default function MeusCursos() {
             key={course.id}
             {...course}
             type="owned"
-            onAction={() => console.log(`Continue course ${course.id}`)}
+            onAction={() => navigate(`/app/visao-geral`)}
           />
         ))}
 

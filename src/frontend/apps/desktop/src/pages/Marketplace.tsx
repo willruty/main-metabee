@@ -189,7 +189,7 @@ export default function Marketplace() {
           <div key={course.id} className="space-y-2">
             <CourseCard
               {...course}
-              onAction={() => console.log(`View course ${course.id}`)}
+              onAction={() => navigate(`/app/visao-geral-curso/`)}
             />
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center gap-2">
