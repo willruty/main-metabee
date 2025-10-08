@@ -11,11 +11,6 @@ export default function Aula() {
     const [isPlaying, setIsPlaying] = useState(false)
     const [volume, setVolume] = useState(50)
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (!token) navigate("/login")
-    }, [])
-
     return (
         <div className="p-6 max-w-6xl mx-auto space-y-6">
             <div>

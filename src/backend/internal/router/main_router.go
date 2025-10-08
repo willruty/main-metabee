@@ -3,19 +3,22 @@ package router
 import (
 	"metabee/internal/controller"
 	"metabee/internal/middleware"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func configRouter() cors.Config {
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173"}
-	config.AllowMethods = []string{"POST", "GET", "DELETE", "PUT"}
-	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
-	config.ExposeHeaders = []string{"Origin", "Content-Type"}
-	config.AllowCredentials = true
-	return config
+
+	return cors.Config{
+		AllowOrigins:     []string{"http://10.154.48.38:5173", "http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}
 }
 
 func SetupMainRouter() *gin.Engine {

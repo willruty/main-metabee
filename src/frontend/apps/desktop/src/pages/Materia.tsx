@@ -23,32 +23,6 @@ export default function BlogPost() {
         source: "TechNews Global",
     }
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (!token) {
-            console.log("Token não encontrado, voltando para login")
-            navigate("/login")
-            return
-        }
-
-        fetch("http://192.168.0.203:8080/metabee/user/auth/validate", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        })
-            .then(async (res) => {
-                if (!res.ok) throw new Error("Token inválido ou expirado")
-                const contentType = res.headers.get("content-type")
-                if (contentType?.includes("application/json")) {
-                    const data = await res.json()
-                    console.log("Token válido:", data)
-                } else throw new Error("Resposta não é JSON")
-            })
-            .catch((err) => {
-                console.error("Erro na validação do token:", err.message)
-                navigate("/login")
-            })
-    }, [])
-
     return (
         <div className="p-6 max-w-3xl mx-auto space-y-6">
             {/* Cabeçalho da matéria */}

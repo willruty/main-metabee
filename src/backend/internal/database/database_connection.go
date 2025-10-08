@@ -1,36 +1,23 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
-	"log"
-	"metabee/internal/config"
-
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+// Define a URI de conexão completa com a sua senha
+const databaseURL = "postgresql://postgres:metabee2025@db.vtzmdlxigiwljyktgdxe.supabase.co:5432/postgres"
 
-func DatabaseConnect() {
+var DB *sql.DB
 
-	HOST := config.Env.Database.Host
-	PORT := config.Env.Database.Port
-	USER := config.Env.Database.User
-	PASSWORD := config.Env.Database.Password
-	DBNAME := config.Env.Database.DatabaseName
+func DBConnect() error {
 
-	// Monta a DSN com as variáveis
-	dsn := fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		HOST, PORT, USER, PASSWORD, DBNAME,
-	)
-
-	// Abre conexão com Gorm moderno
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := sql.Open("postgres", databaseURL)
 	if err != nil {
-		log.Fatalf("Erro ao conectar ao banco: %v", err)
+		return fmt.Errorf("failed to open database: %w", err)
 	}
 
 	DB = db
-	log.Println("Conexão com banco estabelecida com sucesso!")
+
+	return nil
 }

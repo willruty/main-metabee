@@ -11,7 +11,7 @@ type User struct {
 }
 
 type Role struct {
-	Id   int   `gorm:"primaryKey;autoIncrement" json:"id"`
+	Id   int    `gorm:"primaryKey;autoIncrement" json:"id"`
 	Name string `gorm:"type:varchar(50);uniqueIndex;not null" json:"name"`
 }
 

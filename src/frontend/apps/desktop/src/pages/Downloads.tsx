@@ -17,11 +17,6 @@ export default function Downloads() {
         { id: 7, name: "Template de Código", progress: 20, status: "paused" },
     ])
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (!token) navigate("/login")
-    }, [])
-
     const activeDownloads = downloads.filter(
         (item) => item.status === "downloading" || item.status === "paused"
     )

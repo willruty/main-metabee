@@ -13,48 +13,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!email.trim() || !password.trim()) {
-      toast.error("Por favor, preencha todos os campos");
-      return;
-    }
-
-    const endpoint = "http://192.168.0.203:8080/metabee/login";
-
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Erro: ${response.status} ${response.statusText}`;
-        try {
-          const errorData = await response.json();
-          if (errorData?.message) {
-            errorMessage = errorData.message;
-          }
-        } catch (err) {
-          // caso não seja JSON, mantém a mensagem padrão
-        }
-        throw new Error(errorMessage);
-      }
-
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
-        toast.success("Login realizado com sucesso!");
-        localStorage.setItem("token", data.token);
-        navigate("/app/homepage");
-      } else {
-        toast.error("Resposta inesperada do servidor.");
-      }
-    } catch (error: any) {
-      toast.error(error.message || "Erro no login, tente novamente");
-    }
+    navigate("/app/homepage");
   };
 
   return (

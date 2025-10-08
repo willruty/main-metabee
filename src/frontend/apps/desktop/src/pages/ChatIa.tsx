@@ -11,11 +11,6 @@ export default function ChatIA() {
     const [input, setInput] = useState("")
     const navigate = useNavigate()
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (!token) navigate("/login")
-    }, [])
-
     const handleSend = async () => {
         if (!input.trim()) return
         const userMessage = { role: "user", content: input }

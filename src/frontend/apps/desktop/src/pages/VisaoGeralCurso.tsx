@@ -21,32 +21,6 @@ export default function CursoDetalhe() {
             "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200",
     }
 
-    useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (!token) {
-            console.log("Token não encontrado, voltando para login")
-            navigate("/login")
-            return
-        }
-
-        fetch("http://192.168.0.203:8080/metabee/user/auth/validate", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        })
-            .then(async (res) => {
-                if (!res.ok) throw new Error("Token inválido ou expirado")
-                const contentType = res.headers.get("content-type")
-                if (contentType?.includes("application/json")) {
-                    const data = await res.json()
-                    console.log("Token válido:", data)
-                } else throw new Error("Resposta não é JSON")
-            })
-            .catch((err) => {
-                console.error("Erro na validação do token:", err.message)
-                navigate("/login")
-            })
-    }, [])
-
     return (
         <div className="p-6 max-w-5xl mx-auto space-y-8">
             {/* Imagem de capa */}
