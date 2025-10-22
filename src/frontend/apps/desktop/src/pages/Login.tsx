@@ -36,7 +36,11 @@ export default function Login() {
     setIsLoading(true);
     setError("");
 
-    const endpoint = isLoginMode ? "/api/v1/login" : "/api/v1/register";
+    const BASE_API_URL = "http://localhost:8080";
+    const endpoint = isLoginMode
+      ? `${BASE_API_URL}/metabee/login`
+      : `${BASE_API_URL}/metabee/register`;
+
     const body = isLoginMode
       ? { email, password }
       : { name, email, password };
@@ -51,16 +55,11 @@ export default function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Ocorreu um erro. Tente novamente.");
+        throw new Error(data.error || data.err || data.message || data.erro);
       }
 
-      if (isLoginMode) {
-        localStorage.setItem("authToken", data.token);
-        navigate("/app/homepage");
-      } else {
-        setIsLoginMode(true);
-        setError("Cadastro realizado com sucesso! Faça o login.");
-      }
+      localStorage.setItem("authToken", data.token);
+      navigate("/app/homepage");
     } catch (err: any) {
       setError(err.message);
     } finally {

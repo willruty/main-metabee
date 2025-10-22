@@ -32,7 +32,7 @@ func AuthMiddleware(c *gin.Context) {
 		return
 	}
 
-	if loggedInUser == nil {
+	if loggedInUser.Email == "" {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Usuário não encontrado"})
 		return
 	}

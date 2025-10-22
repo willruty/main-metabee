@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"metabee/internal/adapter"
 	"metabee/internal/model/dao"
 	"metabee/internal/model/dto"
 	"metabee/internal/service"
@@ -19,7 +20,7 @@ func Register(c *gin.Context) {
 	}
 
 	var err error
-	var user dao.UserDao
+	user := adapter.UserAdapter{}.DtoToDao(input)
 	user.Password, err = util.HashPassword(user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao hashear a senha"})
@@ -27,7 +28,8 @@ func Register(c *gin.Context) {
 	}
 
 	var userDao dao.UserDao
-	if _, err := userDao.CreateUser(user.Name, user.Email, user.Password); err != nil {
+	user, err = userDao.CreateUser(user.Name, user.Email, user.Password)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -39,7 +41,7 @@ func Register(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"access_token": token,
+		"token": token,
 	})
 }
 

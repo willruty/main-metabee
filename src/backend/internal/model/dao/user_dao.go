@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 	"metabee/internal/database"
 	"time"
@@ -21,6 +22,11 @@ type UserDao struct {
 	CreatedAt time.Time          `bson:"created_at"`
 }
 
+type LoginInput struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 const userCollectionName = "user"
 
 func (dao UserDao) HashPassword(password string) (string, error) {
@@ -33,7 +39,7 @@ func (dao UserDao) CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func (dao UserDao) FindUserByEmail(email string) (*UserDao, error) {
+func (dao UserDao) FindUserByEmail(email string) (UserDao, error) {
 	collection := database.DB.Collection(userCollectionName)
 
 	filter := bson.M{"email": email}
@@ -43,52 +49,50 @@ func (dao UserDao) FindUserByEmail(email string) (*UserDao, error) {
 
 	var user UserDao
 	if err := collection.FindOne(ctx, filter).Decode(&user); err != nil {
-		if err == mongo.ErrNoDocuments {
-			return nil, nil
-		}
-		return nil, err
+		return UserDao{}, fmt.Errorf("usuário com email %s nao encontrado", email)
 	}
 
-	return &user, nil
+	return user, nil
 }
 
-func (dao UserDao) CreateUser(name, email, password string) (*UserDao, error) {
+func (dao UserDao) CreateUser(name, email, password string) (UserDao, error) {
+
+	var newUser UserDao
 	if existingUser, err := dao.FindUserByEmail(email); err != nil {
-		return nil, err
-	} else if existingUser != nil {
-		return nil, errors.New("usuário com este email já existe")
+		passwordHash, err := dao.HashPassword(password)
+		if err != nil {
+			return UserDao{}, err
+		}
+
+		newUser = UserDao{
+			ID:        primitive.NewObjectID(),
+			Name:      name,
+			Email:     email,
+			Password:  passwordHash,
+			CreatedAt: time.Now(),
+		}
+
+		collection := database.DB.Collection(userCollectionName)
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		result, err := collection.InsertOne(ctx, newUser)
+		if err != nil {
+			return UserDao{}, fmt.Errorf("falha ao inserir usuário: %v", err)
+		}
+
+		log.Printf("Novo usuário inserido com sucesso, ID: %s", result.InsertedID)
+	} else if existingUser != dao {
+		return UserDao{}, errors.New("usuário com este email já existe")
 	}
 
-	passwordHash, err := dao.HashPassword(password)
-	if err != nil {
-		return nil, err
-	}
-
-	newUser := UserDao{
-		ID:        primitive.NewObjectID(),
-		Name:      name,
-		Email:     email,
-		Password:  passwordHash,
-		CreatedAt: time.Now(),
-	}
-
-	collection := database.DB.Collection(userCollectionName)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	result, err := collection.InsertOne(ctx, newUser)
-	if err != nil {
-		return nil, err
-	}
-
-	log.Printf("Novo usuário inserido com sucesso, ID: %s", result.InsertedID)
-	return &newUser, nil
+	return newUser, nil
 }
 
-func (dao *UserDao) FindUserByID(idString string) (*UserDao, error) {
+func (dao *UserDao) FindUserByID(idString string) (UserDao, error) {
 	objID, err := primitive.ObjectIDFromHex(idString)
 	if err != nil {
-		return nil, errors.New("id de usuário inválido")
+		return UserDao{}, errors.New("id de usuário inválido")
 	}
 
 	filter := bson.M{"_id": objID}
@@ -101,10 +105,10 @@ func (dao *UserDao) FindUserByID(idString string) (*UserDao, error) {
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, nil
+			return UserDao{}, nil
 		}
-		return nil, err
+		return UserDao{}, err
 	}
 
-	return &user, nil
+	return user, nil
 }

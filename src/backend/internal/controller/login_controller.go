@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"metabee/internal/adapter"
 	"metabee/internal/model/dao"
 	"metabee/internal/service"
 	"metabee/internal/util"
@@ -8,11 +9,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-type LoginInput struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
 
 type LoginOutput struct {
 	AccessToken  string `json:"access_token"`
@@ -22,20 +18,22 @@ type LoginOutput struct {
 
 func Login(c *gin.Context) {
 
-	var input LoginInput
+	var input dao.LoginInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
 		return
 	}
 
+	userDto := adapter.UserAdapter{}.LoginInputToDao(input)
+
 	var userDao dao.UserDao
-	user, err := userDao.FindUserByEmail(input.Email)
+	user, err := userDao.FindUserByEmail(userDto.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
 		return
 	}
 
-	if !util.CheckPasswordHash(input.Password, user.Password) {
+	if !util.CheckPasswordHash(userDto.Password, user.Password) {
 		c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
 		return
 	}
