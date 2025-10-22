@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"metabee/internal/config"
 	"metabee/internal/database"
 	"metabee/internal/router"
@@ -11,9 +10,8 @@ import (
 func main() {
 
 	config.Load()
-	if err := database.DBConnect(); err != nil {
-		log.Println(err)
-	}
+	database.ConnectMongoDB()
+
 	port := strconv.Itoa(config.Env.Service.Port)
 
 	r := router.SetupMainRouter()

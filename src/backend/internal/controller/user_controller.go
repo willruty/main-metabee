@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"metabee/internal/adapter"
 	"metabee/internal/model/dao"
 	"metabee/internal/model/dto"
 	"metabee/internal/service"
@@ -9,7 +8,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func Register(c *gin.Context) {
@@ -20,24 +18,21 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	var adapter adapter.UserAdapter
-	userOrm := adapter.DtoToOrm(input)
-
 	var err error
-	userOrm.PasswordHash, err = util.HashPassword(userOrm.PasswordHash)
+	var user dao.UserDao
+	user.Password, err = util.HashPassword(user.Password)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"erro": "Erro ao hashear a senha"})
 		return
 	}
-	userOrm.Id = uuid.NewString()
 
 	var userDao dao.UserDao
-	if err := userDao.Register(userOrm); err != nil {
+	if _, err := userDao.CreateUser(user.Name, user.Email, user.Password); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	token, err := service.GenerateJWT(userOrm.Id)
+	token, err := service.GenerateJWT(user.ID.String())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
 		return

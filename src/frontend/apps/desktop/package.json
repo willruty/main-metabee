@@ -4,6 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "main": "electron/main.ts",
+  "build": {
+    "appId": "MetaStation",
+    "productName": "MateStation",
+    "win": {
+      "icon": "assets/logo.png"
+    }
+  },
   "scripts": {
     "build:electron": "tsc -p tsconfig.electron.json",
     "dev": "concurrently \"cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\" \"vite\"",

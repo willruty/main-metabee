@@ -21,6 +21,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import logo from "@/assets/logo-removebg-preview.png";
 
 const mainItems = [
   { title: "Homepage", url: "/app/homepage", icon: Home },
@@ -74,9 +75,11 @@ export function AppSidebar() {
         {/* Logo */}
         <div className="p-4 border-b border-sidebar-border">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
-              M
-            </div>
+            <img
+              src={logo}
+              alt="MetaStation Logo"
+              className="w-8 h-8 rounded-lg object-contain"
+            />
             {(!collapsed || isHovered) && (
               <div className="text-lg font-bold text-primary">
                 MetaStation

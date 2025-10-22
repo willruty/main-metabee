@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"metabee/internal/model/dao"
-	"metabee/internal/model/orm"
 	"metabee/internal/service"
 	"net/http"
 	"strings"
@@ -26,14 +25,18 @@ func AuthMiddleware(c *gin.Context) {
 		return
 	}
 
-	var userDao dao.UserDao
-	err = userDao.Login(orm.User{Id: userId})
+	userDao := dao.UserDao{}
+	loggedInUser, err := userDao.FindUserByID(userId)
 	if err != nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Erro ao verificar usuário"})
 		return
 	}
 
-	c.Set("userID", userId)
+	if loggedInUser == nil {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Usuário não encontrado"})
+		return
+	}
 
+	c.Set("currentUser", loggedInUser)
 	c.Next()
 }

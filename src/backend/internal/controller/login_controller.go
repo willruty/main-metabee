@@ -29,18 +29,18 @@ func Login(c *gin.Context) {
 	}
 
 	var userDao dao.UserDao
-	user, err := userDao.GetUserByEmail(input.Email)
+	user, err := userDao.FindUserByEmail(input.Email)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
 		return
 	}
 
-	if !util.CheckPasswordHash(input.Password, user.PasswordHash) {
+	if !util.CheckPasswordHash(input.Password, user.Password) {
 		c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
 		return
 	}
 
-	token, err := service.GenerateJWT(user.Id)
+	token, err := service.GenerateJWT(user.ID.String())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
 		return

@@ -34,10 +34,9 @@ func ValidateJWT(tokenString string) (string, error) {
 
 	parser := jwt.NewParser(jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Name}))
 
-	token, err := parser.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+	if token, err := parser.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(jwtSecret), nil
-	})
-	if err != nil || !token.Valid {
+	}); err != nil || !token.Valid {
 		return "", err
 	}
 
