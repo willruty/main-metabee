@@ -55,19 +55,19 @@ func (dao UserDao) FindUserByEmail(email string) (UserDao, error) {
 	return user, nil
 }
 
-func (dao UserDao) CreateUser(name, email, password string) (UserDao, error) {
+func (dao UserDao) CreateUser(user UserDao) (UserDao, error) {
 
 	var newUser UserDao
-	if existingUser, err := dao.FindUserByEmail(email); err != nil {
-		passwordHash, err := dao.HashPassword(password)
+	if existingUser, err := dao.FindUserByEmail(user.Email); err != nil {
+		passwordHash, err := dao.HashPassword(user.Password)
 		if err != nil {
 			return UserDao{}, err
 		}
 
 		newUser = UserDao{
 			ID:        primitive.NewObjectID(),
-			Name:      name,
-			Email:     email,
+			Name:      user.Name,
+			Email:     user.Email,
 			Password:  passwordHash,
 			CreatedAt: time.Now(),
 		}

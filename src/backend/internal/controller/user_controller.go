@@ -28,7 +28,7 @@ func Register(c *gin.Context) {
 	}
 
 	var userDao dao.UserDao
-	user, err = userDao.CreateUser(user.Name, user.Email, user.Password)
+	user, err = userDao.CreateUser(user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

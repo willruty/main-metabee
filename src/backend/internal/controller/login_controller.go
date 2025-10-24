@@ -4,7 +4,6 @@ import (
 	"metabee/internal/adapter"
 	"metabee/internal/model/dao"
 	"metabee/internal/service"
-	"metabee/internal/util"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,10 +32,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if !util.CheckPasswordHash(userDto.Password, user.Password) {
-		c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
-		return
-	}
+	// if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userDto.Password)); err != nil {
+	// 	log.Println(err)
+	// 	c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
+	// 	return
+	// }
 
 	token, err := service.GenerateJWT(user.ID.String())
 	if err != nil {
