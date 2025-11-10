@@ -6,10 +6,10 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { name: "Início", href: "/" },
-    { name: "Cursos", href: "/#courses" },
-    { name: "Preços", href: "/#pricing" },
-    { name: "Sobre", href: "/#about" },
+    { name: "Início", href: "/web-metabee/" },
+    { name: "Cursos", href: "/web-metabee/#courses" },
+    { name: "Preços", href: "/web-metabee/#pricing" },
+    { name: "Sobre", href: "/web-metabee/#about" },
   ];
 
   return (
@@ -39,7 +39,7 @@ const Navigation = () => {
           {/* CTA Button */}
           <div className="hidden md:block">
             <Button className="bg-primary text-primary-foreground hover:bg-primary/90 glow-effect">
-              <a href="/payment">
+              <a href="/web-metabee/payment">
                 Começar Agora
               </a>
             </Button>

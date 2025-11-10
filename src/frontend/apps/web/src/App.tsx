@@ -15,7 +15,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename="web-metabee">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/payment" element={<Payment />} />
