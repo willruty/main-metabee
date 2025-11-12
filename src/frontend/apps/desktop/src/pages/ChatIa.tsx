@@ -18,7 +18,7 @@ export default function ChatIA() {
         setInput("")
 
         try {
-            const res = await fetch("http://192.168.0.203:8080/chat/ia", {
+            const res = await fetch("http://localhost:8080/metabee/chat/ia", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

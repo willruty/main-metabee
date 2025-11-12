@@ -47,6 +47,10 @@ func SetupMainRouter() *gin.Engine {
 			dashboard.GET("/name", middleware.AuthMiddleware, controller.Dashboard)
 		}
 
+		chatIa := main.Group("/chat")
+		{
+			chatIa.POST("/ia", controller.ChatIa)
+		}
 	}
 
 	return route
