@@ -59,6 +59,8 @@ export default function Login() {
       }
 
       localStorage.setItem("authToken", data.token);
+      console.log(data.token);
+      
       navigate("/app/homepage");
     } catch (err: any) {
       setError(err.message);

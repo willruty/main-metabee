@@ -1,9 +1,10 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CourseCard } from "@/components/CourseCard";
 import { Button } from "@/components/ui/button";
 import { BookOpen, TrendingUp, Clock, Plus } from "lucide-react";
+import { fetchDashboardData } from "../services/DashboardService";
 
 // Import course images
 import courseRoboticsImage from "@/assets/course-robotics.jpg";
@@ -46,6 +47,21 @@ const news = [
 
 export default function Homepage() {
 
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchDashboardData();
+        setUserName(data.user_name);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    load();
+  }, []);
+
   const navigate = useNavigate()
 
   return (
@@ -53,7 +69,7 @@ export default function Homepage() {
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">
-          Bem-vindo de volta! 👋
+          Bem-vindo de volta, {userName}! 👋
         </h1>
         <p className="text-muted-foreground">
           Continue sua jornada de aprendizado em robótica e IA

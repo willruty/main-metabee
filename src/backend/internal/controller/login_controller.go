@@ -32,13 +32,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userDto.Password)); err != nil {
-	// 	log.Println(err)
-	// 	c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
-	// 	return
-	// }
-
-	token, err := service.GenerateJWT(user.ID.String())
+	token, err := service.GenerateJWT(user.ID.Hex())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
 		return

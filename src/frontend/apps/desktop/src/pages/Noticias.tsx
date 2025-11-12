@@ -37,42 +37,42 @@ const articles = [
         date: "24 Set 2025",
     },
     {
-        id: 3,
+        id: 5,
         title: "Impressão 3D em Escala Industrial",
         excerpt:
             "A impressão 3D está mudando a forma como produtos são fabricados, permitindo customização em massa.",
         date: "25 Set 2025",
     },
     {
-        id: 4,
+        id: 6,
         title: "IA e Ética: O Debate Continua",
         excerpt:
             "Especialistas discutem os impactos éticos da implementação de sistemas autônomos em larga escala.",
         date: "24 Set 2025",
     },
     {
-        id: 3,
+        id: 7,
         title: "Impressão 3D em Escala Industrial",
         excerpt:
             "A impressão 3D está mudando a forma como produtos são fabricados, permitindo customização em massa.",
         date: "25 Set 2025",
     },
     {
-        id: 4,
+        id: 8,
         title: "IA e Ética: O Debate Continua",
         excerpt:
             "Especialistas discutem os impactos éticos da implementação de sistemas autônomos em larga escala.",
         date: "24 Set 2025",
     },
     {
-        id: 3,
+        id: 9,
         title: "Impressão 3D em Escala Industrial",
         excerpt:
             "A impressão 3D está mudando a forma como produtos são fabricados, permitindo customização em massa.",
         date: "25 Set 2025",
     },
     {
-        id: 4,
+        id: 10,
         title: "IA e Ética: O Debate Continua",
         excerpt:
             "Especialistas discutem os impactos éticos da implementação de sistemas autônomos em larga escala.",

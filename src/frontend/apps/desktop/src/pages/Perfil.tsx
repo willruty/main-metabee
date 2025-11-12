@@ -204,7 +204,7 @@ export default function Perfil() {
                     <h3 className="font-medium text-foreground">Perfil Público</h3>
                     <p className="text-sm text-muted-foreground">Permitir que outros vejam seu perfil</p>
                   </div>
-                  <Button variant="outline" size="sm">Configurar</Button>
+                  <Button variant="outline" size="sm" onClick={() => {navigate("/app/configuracoes")}}>Configurar</Button>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -212,7 +212,7 @@ export default function Perfil() {
                     <h3 className="font-medium text-foreground">Notificações por Email</h3>
                     <p className="text-sm text-muted-foreground">Receber atualizações de cursos por email</p>
                   </div>
-                  <Button variant="outline" size="sm">Configurar</Button>
+                  <Button variant="outline" size="sm" onClick={() => {navigate("/app/configuracoes")}}>Configurar</Button>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -220,7 +220,7 @@ export default function Perfil() {
                     <h3 className="font-medium text-foreground">Dados de Uso</h3>
                     <p className="text-sm text-muted-foreground">Compartilhar dados para melhorar a experiência</p>
                   </div>
-                  <Button variant="outline" size="sm">Configurar</Button>
+                  <Button variant="outline" size="sm" onClick={() => {navigate("/app/configuracoes")}}>Configurar</Button>
                 </div>
               </div>
             </CardContent>

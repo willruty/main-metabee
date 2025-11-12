@@ -41,6 +41,12 @@ func SetupMainRouter() *gin.Engine {
 		{
 			user.GET("auth/validate", controller.ValidateToken)
 		}
+
+		dashboard := main.Group("/dashboard")
+		{
+			dashboard.GET("/name", middleware.AuthMiddleware, controller.Dashboard)
+		}
+
 	}
 
 	return route

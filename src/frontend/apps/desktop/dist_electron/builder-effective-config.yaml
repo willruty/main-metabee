@@ -26,4 +26,4 @@ nsis:
   shortcutName: MetaStation
   uninstallDisplayName: MetaStation
   artifactName: MetaStation-Setup-${version}.exe
-electronVersion: 38.1.2
+electronVersion: 38.6.0

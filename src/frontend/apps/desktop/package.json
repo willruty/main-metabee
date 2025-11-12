@@ -4,13 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "main": "electron/main.ts",
+  "desktop": "npm run build && electron .",
   "scripts": {
     "build:electron": "tsc -p tsconfig.electron.json",
     "dev": "concurrently \"cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\" \"vite\"",
     "build": "vite build && npm run build:electron",
     "lint": "eslint .",
     "preview": "vite preview",
-    "desktop": "npm run build && electron .",
     "dist": "electron-builder"
   },
   "dependencies": {
@@ -74,8 +74,8 @@
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.2.1",
-    "cross-env": "^10.0.0",
-    "electron": "^38.1.2",
+    "cross-env": "^10.1.0",
+    "electron": "^38.6.0",
     "electron-builder": "^26.0.12",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",

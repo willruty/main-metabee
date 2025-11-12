@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"metabee/internal/adapter"
 	"metabee/internal/model/dao"
 	"metabee/internal/model/dto"
@@ -34,15 +35,14 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	token, err := service.GenerateJWT(user.ID.String())
+	token, err := service.GenerateJWT(user.ID.Hex())
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao gerar token"})
+		log.Println("erro ao gerar token:", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro interno"})
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"token": token,
-	})
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
 func ValidateToken(c *gin.Context) {

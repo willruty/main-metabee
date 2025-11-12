@@ -54,7 +54,7 @@ export default function ChatIA() {
                                     <Bot className="h-5 w-5 text-primary mt-1" />
                                 )}
                                 <div
-                                    className={`px-3 py-2 rounded-xl max-w-[70%] ${msg.role === "user"
+                                    className={`px-3 py-2 my-1 rounded-xl max-w-[70%] ${msg.role === "user"
                                             ? "bg-primary text-primary-foreground"
                                             : "bg-muted text-foreground"
                                         }`}

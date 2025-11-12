@@ -28,6 +28,8 @@ id_rsa_bb
 # Folders
 bin/
 temp/
+dist/
+dist_electron/
 
 # Logs
 logs
