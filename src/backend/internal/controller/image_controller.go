@@ -195,3 +195,57 @@ func GetImageByName(c *gin.Context) {
 	c.Data(http.StatusOK, contentType, image.Data.Data)
 }
 
+// GetNewsImage retorna a imagem de uma notícia
+func GetNewsImage(c *gin.Context) {
+	newsID := c.Param("id")
+	log.Printf("GET /metabee/news/%s/image - Requisição recebida", newsID)
+
+	objID, err := bson.ObjectIDFromHex(newsID)
+	if err != nil {
+		log.Printf("ID inválido: %s - %v", newsID, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID da notícia inválido"})
+		return
+	}
+
+	var newsDao dao.NewsDao
+	news, err := newsDao.FindByID(objID)
+	if err != nil {
+		log.Printf("Notícia não encontrada: %s - %v", newsID, err)
+		c.JSON(http.StatusNotFound, gin.H{"error": "Notícia não encontrada"})
+		return
+	}
+
+	// 1. Se ImageID está presente, buscar da collection images
+	if !news.ImageID.IsZero() {
+		var imageDao dao.ImageDao
+		image, err := imageDao.FindImageByID(news.ImageID)
+		if err == nil && len(image.Data.Data) > 0 {
+			contentType := image.MimeType
+			if contentType == "" {
+				contentType = "image/jpeg"
+			}
+			c.Header("Content-Type", contentType)
+			c.Header("Cache-Control", "public, max-age=31536000")
+			c.Data(http.StatusOK, contentType, image.Data.Data)
+			return
+		}
+	}
+
+	// 2. Se Image (string path/URL) está presente, redirecionar
+	if news.Image != "" {
+		if news.Image[0] == '/' {
+			c.Redirect(http.StatusFound, news.Image)
+			return
+		}
+		if len(news.Image) > 7 && (news.Image[:7] == "http://" || news.Image[:8] == "https://") {
+			c.Redirect(http.StatusFound, news.Image)
+			return
+		}
+		// Se for apenas o nome do arquivo, redirecionar para /images/
+		c.Redirect(http.StatusFound, "/images/"+news.Image)
+		return
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{"error": "Imagem não encontrada"})
+}
+

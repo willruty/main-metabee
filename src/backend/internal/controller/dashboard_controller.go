@@ -73,7 +73,7 @@ func Dashboard(c *gin.Context) {
 	}
 
 	// Últimas 2 notícias
-	lastNews, err := newsDao.GetLastTwoNews()
+	lastNews, err := newsDao.GetLastNews(2)
 	if err != nil {
 		log.Printf("Erro ao buscar notícias: %v", err)
 		lastNews = []dao.NewsDao{}
@@ -132,11 +132,11 @@ func formatNews(news []dao.NewsDao) []gin.H {
 	result := make([]gin.H, 0)
 	for _, n := range news {
 		result = append(result, gin.H{
-			"id":        n.ID.Hex(),
-			"title":     n.Title,
-			"content":   n.Content,
-			"image":     n.Image,
-			"author":    n.Author,
+			"id":         n.ID.Hex(),
+			"title":      n.Title,
+			"content":    n.Content,
+			"image":      n.Image,
+			"writer":     n.Writer,
 			"created_at": n.CreatedAt.Format(time.RFC3339),
 		})
 	}

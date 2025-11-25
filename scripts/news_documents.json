@@ -1,0 +1,232 @@
+[
+  {
+    "_id": {
+      "$oid": "5c6f93cf592239ad73f05269"
+    },
+    "title": "Revolução da Inteligência Artificial em 2024",
+    "date": {
+      "$date": "2025-11-25T15:35:57.084Z"
+    },
+    "description": "As últimas inovações em IA estão transformando a indústria tecnológica",
+    "content": "A inteligência artificial continua evoluindo rapidamente, com novos modelos e aplicações sendo lançados constantemente. Empresas líderes estão investindo bilhões em pesquisa e desenvolvimento para criar sistemas mais inteligentes e eficientes.",
+    "font": "TechNews",
+    "writer": "Maria Silva",
+    "image": "/images/news-ai.jpg",
+    "image_id": {
+      "$oid": "08a9db9988f54d8530468a00"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "7bff34b2e78e1383780ea4d1"
+    },
+    "title": "Robótica Avançada: O Futuro da Automação",
+    "date": {
+      "$date": "2025-11-24T15:35:57.634Z"
+    },
+    "description": "Robôs cada vez mais sofisticados estão mudando o mercado de trabalho",
+    "content": "A robótica avançada está revolucionando diversos setores, desde a manufatura até os serviços. Novos robôs com capacidades de aprendizado estão sendo desenvolvidos para trabalhar em ambientes complexos e colaborar com humanos de forma mais eficiente.",
+    "font": "Robotics Today",
+    "writer": "João Santos",
+    "image": "/images/news-robotics.jpg",
+    "image_id": {
+      "$oid": "863f3a35432806ce0ea1f00a"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "023fdaf2e8b951f068e10061"
+    },
+    "title": "Python Domina o Desenvolvimento de Software",
+    "date": {
+      "$date": "2025-11-23T15:35:58.169Z"
+    },
+    "description": "Linguagem se consolida como a mais popular entre desenvolvedores",
+    "content": "Python continua sendo a linguagem de programação mais popular do mundo, com crescimento constante em diversos setores. Sua simplicidade e versatilidade a tornam ideal para projetos de ciência de dados, desenvolvimento web e automação.",
+    "font": "Dev Weekly",
+    "writer": "Ana Costa",
+    "image": "/images/news-python.jpg",
+    "image_id": {
+      "$oid": "a4c3d8f659d2b8c3cbd6ebab"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "d098565d6d9238712cca3f24"
+    },
+    "title": "Visão Computacional: Novos Horizontes",
+    "date": {
+      "$date": "2025-11-22T15:35:58.700Z"
+    },
+    "description": "Tecnologias de reconhecimento de imagem alcançam novos patamares",
+    "content": "A visão computacional está alcançando níveis de precisão impressionantes, com aplicações em medicina, segurança, transporte autônomo e muito mais. Novos algoritmos estão permitindo que máquinas vejam e interpretem o mundo de forma cada vez mais precisa.",
+    "font": "AI Insights",
+    "writer": "Carlos Oliveira",
+    "image": "/images/news-vision.jpg",
+    "image_id": {
+      "$oid": "18da302bdc3973bb3e9f3f08"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "10dbddd63675c660f314bead"
+    },
+    "title": "Arduino: Democratizando a Eletrônica",
+    "date": {
+      "$date": "2025-11-21T15:35:59.233Z"
+    },
+    "description": "Plataforma acessível permite que qualquer pessoa crie projetos inovadores",
+    "content": "O Arduino continua sendo uma das plataformas mais acessíveis para iniciantes em eletrônica e programação. Com uma comunidade global ativa e milhares de projetos disponíveis, está facilitando a criação de soluções inovadoras em IoT e automação residencial.",
+    "font": "Maker Magazine",
+    "writer": "Pedro Alves",
+    "image": "/images/news-arduino.jpg",
+    "image_id": {
+      "$oid": "9dc72e60dd1407a9c4728f59"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "876bd70be1976a7b5c1f6169"
+    },
+    "title": "Eletrônica Moderna: Componentes do Futuro",
+    "date": {
+      "$date": "2025-11-20T15:35:59.769Z"
+    },
+    "description": "Novos componentes eletrônicos prometem revolucionar dispositivos",
+    "content": "A indústria de componentes eletrônicos está em constante evolução, com novos materiais e designs que permitem dispositivos menores, mais eficientes e poderosos. Pesquisadores estão desenvolvendo componentes que podem transformar completamente a forma como interagimos com a tecnologia.",
+    "font": "Electronics Today",
+    "writer": "Fernanda Lima",
+    "image": "/images/news-electronics.jpg",
+    "image_id": {
+      "$oid": "d8d2fb4352ead86789e49187"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "cc4a2a4be8a42ab63d51c9a6"
+    },
+    "title": "Programação: Habilidades Essenciais para 2024",
+    "date": {
+      "$date": "2025-11-19T15:36:00.305Z"
+    },
+    "description": "Quais linguagens e tecnologias você precisa dominar este ano",
+    "content": "O mercado de desenvolvimento de software continua aquecido, com alta demanda por profissionais qualificados. Linguagens como JavaScript, Python e Go estão em alta, enquanto frameworks modernos como React e Next.js dominam o desenvolvimento web.",
+    "font": "Code Weekly",
+    "writer": "Lucas Martins",
+    "image": "/images/news-programming.jpg",
+    "image_id": {
+      "$oid": "6431cb03deb0dc7f2e5217b9"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "d94ac2a65ecfbd5d310514c9"
+    },
+    "title": "Machine Learning: Aplicações Práticas",
+    "date": {
+      "$date": "2025-11-18T15:36:00.840Z"
+    },
+    "description": "Como empresas estão usando ML para resolver problemas reais",
+    "content": "Machine Learning está sendo aplicado em diversos setores, desde recomendações de produtos até diagnósticos médicos. Empresas estão descobrindo novas formas de usar dados para tomar decisões mais inteligentes e criar produtos melhores.",
+    "font": "Data Science Journal",
+    "writer": "Juliana Rocha",
+    "image": "/images/news-ml.jpg",
+    "image_id": {
+      "$oid": "265467014e9f8c125d7fc012"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "d6e6cb9acf206db14d1568ee"
+    },
+    "title": "Desenvolvimento Web: Tendências 2024",
+    "date": {
+      "$date": "2025-11-17T15:36:01.374Z"
+    },
+    "description": "As principais tecnologias que estão moldando o futuro da web",
+    "content": "O desenvolvimento web está evoluindo rapidamente, com novas ferramentas e frameworks sendo lançados constantemente. Serverless, edge computing e aplicações web progressivas estão se tornando padrão na indústria.",
+    "font": "Web Dev News",
+    "writer": "Rafael Souza",
+    "image": "/images/news-web.jpg",
+    "image_id": {
+      "$oid": "ae6a6568ece56b9bb16dad9f"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "dddf86ec5ab5cd5306f10004"
+    },
+    "title": "Data Science: Transformando Dados em Insights",
+    "date": {
+      "$date": "2025-11-16T15:36:01.918Z"
+    },
+    "description": "Como cientistas de dados estão ajudando empresas a crescer",
+    "content": "A ciência de dados continua sendo uma das áreas mais promissoras da tecnologia. Profissionais qualificados estão ajudando empresas de todos os tamanhos a entender melhor seus dados e tomar decisões baseadas em evidências.",
+    "font": "Analytics Today",
+    "writer": "Patricia Mendes",
+    "image": "/images/news-data.jpg",
+    "image_id": {
+      "$oid": "671496a5b543597bbaad546a"
+    },
+    "created_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    },
+    "updated_at": {
+      "$date": "2025-11-25T15:35:56.665Z"
+    }
+  }
+]

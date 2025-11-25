@@ -81,6 +81,21 @@ func SetupMainRouter() *gin.Engine {
 		}
 
 		// ============================================
+		// NEWS - Rotas Públicas
+		// ============================================
+		// IMPORTANTE: Rotas mais específicas primeiro para evitar conflitos
+		main.GET("/news/last", controller.GetLastNews)              // GET /metabee/news/last
+		main.GET("/news/:id/image", controller.GetNewsImage)       // GET /metabee/news/:id/image
+		main.GET("/news/:id", controller.GetNewsByID)              // GET /metabee/news/:id
+		main.GET("/news", controller.GetAllNews)                   // GET /metabee/news
+		
+		log.Println("✅ Rotas de NEWS registradas:")
+		log.Println("   GET /metabee/news")
+		log.Println("   GET /metabee/news/last")
+		log.Println("   GET /metabee/news/:id")
+		log.Println("   GET /metabee/news/:id/image")
+
+		// ============================================
 		// Rotas Autenticadas
 		// ============================================
 		// Usuário
