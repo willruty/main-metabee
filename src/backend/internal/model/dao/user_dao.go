@@ -182,23 +182,81 @@ func (dao *UserDao) FindUserByID(idString string) (UserDao, error) {
 	return user, nil
 }
 
+// HasAvatar verifica se o usuário tem avatar sem decodificar o binário
+func (dao *UserDao) HasAvatar(userID bson.ObjectID) bool {
+	collection := database.DB.Collection(userCollectionName)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Buscar apenas o campo avatar sem decodificar
+	var result bson.M
+	opts := options.FindOne().SetProjection(bson.M{"avatar": 1})
+	err := collection.FindOne(ctx, bson.M{"_id": userID}, opts).Decode(&result)
+	if err != nil {
+		return false
+	}
+
+	avatar, exists := result["avatar"]
+	return exists && avatar != nil
+}
+
+// GetUserAvatar retorna o avatar do usuário
+func (dao *UserDao) GetUserAvatar(userID bson.ObjectID) (bson.Binary, string, error) {
+	collection := database.DB.Collection(userCollectionName)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Buscar apenas avatar e avatar_mime_type
+	var result struct {
+		Avatar         bson.Binary `bson:"avatar,omitempty"`
+		AvatarMimeType string      `bson:"avatar_mime_type,omitempty"`
+	}
+	opts := options.FindOne().SetProjection(bson.M{
+		"avatar":          1,
+		"avatar_mime_type": 1,
+	})
+	err := collection.FindOne(ctx, bson.M{"_id": userID}, opts).Decode(&result)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return bson.Binary{}, "", errors.New("usuário não encontrado")
+		}
+		return bson.Binary{}, "", fmt.Errorf("erro ao buscar avatar: %v", err)
+	}
+
+	return result.Avatar, result.AvatarMimeType, nil
+}
+
 // GetUserProfile retorna os dados do perfil do usuário (sem senha)
 func (dao *UserDao) GetUserProfile(userID bson.ObjectID) (UserDao, error) {
 	collection := database.DB.Collection(userCollectionName)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// Usar projection para excluir o campo avatar e password para evitar problemas de decodificação
+	opts := options.FindOne().SetProjection(bson.M{
+		"avatar":  0, // Excluir avatar da busca para evitar problemas de decodificação
+		"password": 0, // Excluir senha por segurança
+	})
+
 	var user UserDao
-	err := collection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
+	err := collection.FindOne(ctx, bson.M{"_id": userID}, opts).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
+			log.Printf("❌ Usuário não encontrado com ID: %s", userID.Hex())
 			return UserDao{}, errors.New("usuário não encontrado")
 		}
-		return UserDao{}, err
+		log.Printf("❌ Erro ao buscar perfil do usuário: %s - %v", userID.Hex(), err)
+		return UserDao{}, fmt.Errorf("erro ao buscar perfil: %v", err)
 	}
 
-	// Não retornar a senha
-	user.Password = ""
+	// Verificar se o avatar existe usando método auxiliar
+	hasAvatar := dao.HasAvatar(userID)
+	if hasAvatar {
+		// Inicializar Avatar vazio - o controller verificará usando HasAvatar
+		user.Avatar = bson.Binary{Subtype: 0, Data: []byte{}}
+	}
+
+	log.Printf("✅ Perfil do usuário encontrado: %s - Email: %s - HasAvatar: %v", userID.Hex(), user.Email, hasAvatar)
 	return user, nil
 }
 

@@ -88,10 +88,13 @@ func GetProfile(c *gin.Context) {
 	var userDao dao.UserDao
 	profile, err := userDao.GetUserProfile(user.ID)
 	if err != nil {
-		log.Printf("Erro ao buscar perfil: %v", err)
+		log.Printf("❌ Erro ao buscar perfil: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar perfil"})
 		return
 	}
+
+	// Verificar se tem avatar usando método auxiliar
+	hasAvatar := userDao.HasAvatar(user.ID)
 
 	// Retornar dados do perfil em snake_case
 	c.JSON(http.StatusOK, gin.H{
@@ -102,7 +105,7 @@ func GetProfile(c *gin.Context) {
 		"location":  profile.Location,
 		"created_at": profile.CreatedAt.Format("2006-01-02T15:04:05Z07:00"),
 		"updated_at": profile.UpdatedAt.Format("2006-01-02T15:04:05Z07:00"),
-		"has_avatar": len(profile.Avatar.Data) > 0,
+		"has_avatar": hasAvatar,
 	})
 }
 
@@ -117,28 +120,28 @@ func GetProfileImage(c *gin.Context) {
 	user := currentUser.(dao.UserDao)
 	
 	var userDao dao.UserDao
-	profile, err := userDao.GetUserProfile(user.ID)
+	avatar, mimeType, err := userDao.GetUserAvatar(user.ID)
 	if err != nil {
-		log.Printf("Erro ao buscar perfil: %v", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar perfil"})
+		log.Printf("❌ Erro ao buscar avatar: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar avatar"})
 		return
 	}
 
 	// Se não tiver avatar, retornar 404
-	if len(profile.Avatar.Data) == 0 {
+	if len(avatar.Data) == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Avatar não encontrado"})
 		return
 	}
 
 	// Retornar a imagem
-	contentType := profile.AvatarMimeType
+	contentType := mimeType
 	if contentType == "" {
 		contentType = "image/jpeg" // Default
 	}
 
 	c.Header("Content-Type", contentType)
 	c.Header("Cache-Control", "public, max-age=31536000")
-	c.Data(http.StatusOK, contentType, profile.Avatar.Data)
+	c.Data(http.StatusOK, contentType, avatar.Data)
 }
 
 // UpdateProfile atualiza os dados do perfil do usuário

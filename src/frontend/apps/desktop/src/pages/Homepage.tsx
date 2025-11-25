@@ -57,7 +57,10 @@ export default function Homepage() {
         
         const data = await fetchDashboardData();
         setDashboardData(data);
-        setUserName(data.user_name || "Usuário");
+        // Pegar apenas o primeiro nome (antes do primeiro espaço)
+        const fullName = data.user_name || "Usuário";
+        const firstName = fullName.split(" ")[0];
+        setUserName(firstName);
       } catch (err: any) {
         console.error("Erro ao carregar dados do dashboard:", err);
         setError(err.message || "Erro ao carregar dados");
