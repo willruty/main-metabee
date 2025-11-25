@@ -1,10 +1,11 @@
 [service]
 port = 8080
+geminiApiKey = "your-gemini-api-key-here"
+n8nWebhookURL = "https://n8n.zenitoficial.com.br/webhook-test/gemini"
 
 [database]
-port = 5432
-host = host
-user = user
-password = password
-dbname = metabee
-jwtsecret = jwtsecret exmaple
+mongoURI = "mongodb+srv://user:password@cluster.mongodb.net/?retryWrites=true&w=majority&appName=Metabee"
+dbName = "metabee_db"
+
+[jwt]
+jwtsecret = "your-jwt-secret-here"

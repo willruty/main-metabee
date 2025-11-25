@@ -1,0 +1,93 @@
+[
+  {
+    "title": "Robótica com Arduino Avançado",
+    "description": "Projetos complexos usando Arduino, sensores avançados e comunicação wireless. Aprenda a criar sistemas robóticos completos do zero.",
+    "image": "/images/course-robotics.jpg",
+    "category": "Arduino",
+    "duration": 18,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_1",
+    "price": 299.90
+  },
+  {
+    "title": "Machine Learning para Robôs",
+    "description": "Implemente redes neurais e algoritmos de aprendizado em sistemas robóticos. Domine IA aplicada à robótica.",
+    "image": "/images/course-ai.jpg",
+    "category": "IA",
+    "duration": 24,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_2",
+    "price": 399.90
+  },
+  {
+    "title": "ROS - Robot Operating System",
+    "description": "Domine o ROS para desenvolvimento de robôs profissionais e industriais. Sistema completo de desenvolvimento.",
+    "image": "/images/course-vision.jpg",
+    "category": "ROS",
+    "duration": 30,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_3",
+    "price": 499.90
+  },
+  {
+    "title": "Eletrônica para Robótica",
+    "description": "Circuitos, PCB design e eletrônica aplicada em projetos robóticos. Fundamentos e práticas avançadas.",
+    "image": "/images/course-python.jpg",
+    "category": "Eletrônica",
+    "duration": 22,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_4",
+    "price": 349.90
+  },
+  {
+    "title": "Braços Robóticos Industriais",
+    "description": "Programação e controle de braços robóticos para automação industrial. Aplicações práticas e reais.",
+    "image": "/images/course-robotics.jpg",
+    "category": "Industrial",
+    "duration": 20,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_5",
+    "price": 449.90
+  },
+  {
+    "title": "Drones Autônomos",
+    "description": "Construção e programação de drones com navegação autônoma. Do básico ao avançado.",
+    "image": "/images/course-ai.jpg",
+    "category": "Drones",
+    "duration": 16,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_6",
+    "price": 379.90
+  },
+  {
+    "title": "Robótica com Arduino",
+    "description": "Aprenda os fundamentos da robótica usando Arduino e sensores. Curso completo para iniciantes.",
+    "image": "/images/course-robotics.jpg",
+    "category": "Arduino",
+    "duration": 12,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_7",
+    "price": 199.90
+  },
+  {
+    "title": "Inteligência Artificial Aplicada",
+    "description": "Implementação de algoritmos de IA em sistemas robóticos modernos. Aprenda na prática.",
+    "image": "/images/course-ai.jpg",
+    "category": "IA",
+    "duration": 16,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_8",
+    "price": 249.90
+  },
+  {
+    "title": "Visão Computacional",
+    "description": "Processamento de imagens e reconhecimento de padrões para robôs autônomos. OpenCV e técnicas avançadas.",
+    "image": "/images/course-vision.jpg",
+    "category": "IA",
+    "duration": 20,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_9",
+    "price": 279.90
+  },
+  {
+    "title": "Programação em Python para Robótica",
+    "description": "Domine Python aplicado ao desenvolvimento de sistemas robóticos. Do básico ao avançado.",
+    "image": "/images/course-python.jpg",
+    "category": "Programação",
+    "duration": 14,
+    "drive_link": "https://drive.google.com/drive/folders/EXEMPLO_ID_DRIVE_10",
+    "price": 229.90
+  }
+]
+

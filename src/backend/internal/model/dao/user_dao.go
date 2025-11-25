@@ -8,14 +8,13 @@ import (
 	"metabee/internal/database"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserDao struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty"`
+	ID        bson.ObjectID `bson:"_id,omitempty"`
 	Name      string             `bson:"name"`
 	Email     string             `bson:"email"`
 	Password  string             `bson:"password"`
@@ -59,16 +58,21 @@ func (dao UserDao) CreateUser(user UserDao) (UserDao, error) {
 
 	var newUser UserDao
 	if existingUser, err := dao.FindUserByEmail(user.Email); err != nil {
-		passwordHash, err := dao.HashPassword(user.Password)
-		if err != nil {
-			return UserDao{}, err
-		}
+		// A senha já deve vir hasheada do controller, não fazer hash novamente
+		// passwordHash, err := dao.HashPassword(user.Password)
+		// if err != nil {
+		// 	return UserDao{}, err
+		// }
 
+		// Garantir que o ID seja ObjectId explicitamente
+		newUserID := bson.NewObjectID()
+		log.Printf("Criando novo usuário com ObjectID: %s (tipo: %T)", newUserID.Hex(), newUserID)
+		
 		newUser = UserDao{
-			ID:        primitive.NewObjectID(),
+			ID:        newUserID,
 			Name:      user.Name,
 			Email:     user.Email,
-			Password:  passwordHash,
+			Password:  user.Password, // Usar a senha já hasheada que veio do controller
 			CreatedAt: time.Now(),
 		}
 
@@ -76,12 +80,28 @@ func (dao UserDao) CreateUser(user UserDao) (UserDao, error) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
-		result, err := collection.InsertOne(ctx, newUser)
+		// Forçar ObjectId explicitamente usando bson.D para garantir o tipo correto
+		doc := bson.D{
+			{Key: "_id", Value: newUserID},
+			{Key: "name", Value: newUser.Name},
+			{Key: "email", Value: newUser.Email},
+			{Key: "password", Value: newUser.Password},
+			{Key: "created_at", Value: newUser.CreatedAt},
+		}
+
+		result, err := collection.InsertOne(ctx, doc)
 		if err != nil {
 			return UserDao{}, fmt.Errorf("falha ao inserir usuário: %v", err)
 		}
 
-		log.Printf("Novo usuário inserido com sucesso, ID: %s", result.InsertedID)
+		log.Printf("Novo usuário inserido com sucesso, ID inserido: %v (tipo: %T)", result.InsertedID, result.InsertedID)
+		
+		// Verificar se o ID inserido é ObjectId
+		if insertedObjID, ok := result.InsertedID.(bson.ObjectID); ok {
+			log.Printf("✅ ID confirmado como ObjectID: %s", insertedObjID.Hex())
+		} else {
+			log.Printf("⚠️  ATENÇÃO: ID inserido não é ObjectID! Tipo: %T, Valor: %v", result.InsertedID, result.InsertedID)
+		}
 	} else if existingUser != dao {
 		return UserDao{}, errors.New("usuário com este email já existe")
 	}
@@ -90,7 +110,7 @@ func (dao UserDao) CreateUser(user UserDao) (UserDao, error) {
 }
 
 func (dao *UserDao) FindUserByID(idString string) (UserDao, error) {
-	objID, err := primitive.ObjectIDFromHex(idString)
+	objID, err := bson.ObjectIDFromHex(idString)
 	if err != nil {
 		return UserDao{}, errors.New("id de usuário inválido")
 	}

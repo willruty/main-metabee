@@ -4,62 +4,78 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CourseCard } from "@/components/CourseCard";
 import { Button } from "@/components/ui/button";
 import { BookOpen, TrendingUp, Clock, Plus } from "lucide-react";
+import { getAllCourses, Course, getCourseImageUrl } from "../services/CourseService";
 import { fetchDashboardData } from "../services/DashboardService";
 
-// Import course images
-import courseRoboticsImage from "@/assets/course-robotics.jpg";
-import courseAiImage from "@/assets/course-ai.jpg";
-
-// Mock data
-const newCourses = [
-  {
-    id: 1,
-    title: "Robótica com Arduino",
-    description: "Aprenda os fundamentos da robótica usando Arduino e sensores.",
-    image: courseRoboticsImage
-  },
-  {
-    id: 2,
-    title: "Inteligência Artificial Aplicada",
-    description: "Implementação de IA em sistemas robóticos modernos.",
-    image: courseAiImage
-  }
-];
-
-const recentClasses = [
-  { title: "Sensores e Atuadores", progress: 75, duration: "45min" },
-  { title: "Programação em C++", progress: 60, duration: "1h 20min" },
-  { title: "Visão Computacional", progress: 30, duration: "2h" }
-];
-
-const news = [
-  {
-    title: "Nova versão do MetaBot disponível",
-    date: "Há 2 dias",
-    description: "Conheça as novas funcionalidades do nosso robô educacional."
-  },
-  {
-    title: "Competição de Robótica 2024",
-    date: "Há 1 semana",
-    description: "Inscrições abertas para a maior competição de robótica do país."
-  }
-];
+interface DashboardData {
+  user_name: string;
+  active_courses: number;
+  hours_this_month: number;
+  average_progress: number;
+  recent_lessons: Array<{
+    course_id?: string;
+    lesson_id?: string;
+    id?: string;
+    title?: string;
+    progress?: number;
+  }>;
+  last_news: Array<{
+    title: string;
+    content: string;
+    created_at: string;
+  }>;
+  last_courses?: Array<{
+    id: string;
+    title: string;
+    description: string;
+    image: string;
+    created_at: string;
+  }>;
+}
 
 export default function Homepage() {
-
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState("Usuário");
+  const [newCourses, setNewCourses] = useState<Course[]>([]);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function load() {
+    // Carregar dados do dashboard
+    const loadDashboardData = async () => {
       try {
+        setIsLoading(true);
         const data = await fetchDashboardData();
-        setUserName(data.user_name);
-      } catch (err) {
-        console.error(err);
+        setDashboardData(data);
+        setUserName(data.user_name || "Usuário");
+      } catch (err: any) {
+        console.error("Erro ao carregar dados do dashboard:", err);
+        setError(err.message || "Erro ao carregar dados");
+        // Manter valores padrão em caso de erro
+        setDashboardData({
+          user_name: "Usuário",
+          active_courses: 0,
+          hours_this_month: 0,
+          average_progress: 0,
+          recent_lessons: [],
+          last_news: [],
+        });
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
 
-    load();
+    loadDashboardData();
+
+    // Carregar cursos
+    getAllCourses().then(courses => {
+      const sortedCourses = courses.courses.sort((a, b) => {
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return dateB - dateA;
+      });
+      setNewCourses(sortedCourses.slice(0, 2));
+    });
   }, []);
 
   const navigate = useNavigate()
@@ -69,11 +85,16 @@ export default function Homepage() {
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">
-          Bem-vindo de volta, {userName}! 👋
+          Bem-vindo de volta, <span className="text-primary">{isLoading ? "..." : userName}!</span> 👋
         </h1>
         <p className="text-muted-foreground">
           Continue sua jornada de aprendizado em robótica e IA
         </p>
+        {error && (
+          <p className="text-sm text-red-500 mt-2">
+            ⚠️ {error}
+          </p>
+        )}
       </div>
 
       {/* Quick Stats */}
@@ -85,7 +106,9 @@ export default function Homepage() {
                 <BookOpen className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">8</p>
+                <p className="text-2xl font-bold text-foreground">
+                  {isLoading ? "..." : (dashboardData?.active_courses || 0)}
+                </p>
                 <p className="text-sm text-muted-foreground">Cursos Ativos</p>
               </div>
             </div>
@@ -99,7 +122,9 @@ export default function Homepage() {
                 <TrendingUp className="h-6 w-6 text-secondary" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">24h</p>
+                <p className="text-2xl font-bold text-foreground">
+                  {isLoading ? "..." : (dashboardData?.hours_this_month ? `${Math.round(dashboardData.hours_this_month)}h` : "0h")}
+                </p>
                 <p className="text-sm text-muted-foreground">Estudadas este mês</p>
               </div>
             </div>
@@ -113,7 +138,9 @@ export default function Homepage() {
                 <Clock className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">85%</p>
+                <p className="text-2xl font-bold text-foreground">
+                  {isLoading ? "..." : (dashboardData?.average_progress ? `${Math.round(dashboardData.average_progress)}%` : "0%")}
+                </p>
                 <p className="text-sm text-muted-foreground">Progresso médio</p>
               </div>
             </div>
@@ -130,27 +157,41 @@ export default function Homepage() {
               <CardTitle className="text-foreground">Minhas Aulas Recentes</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {recentClasses.map((cls, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-brand-input-bg rounded-lg">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-foreground">{cls.title}</h4>
-                    <div className="flex items-center gap-4 mt-2">
-                      <div className="flex-1 bg-brand-surface rounded-full h-2">
-                        <div
-                          className="bg-primary h-2 rounded-full transition-all"
-                          style={{ width: `${cls.progress}%` }}
-                        />
-                      </div>
-                      <span className="text-sm text-muted-foreground">{cls.progress}%</span>
+              {isLoading ? (
+                <p className="text-muted-foreground text-center py-4">Carregando...</p>
+              ) : dashboardData?.recent_lessons && dashboardData.recent_lessons.length > 0 ? (
+                dashboardData.recent_lessons.map((lesson: any, index: number) => (
+                  <div key={lesson.id || index} className="flex items-center justify-between p-4 bg-brand-input-bg rounded-lg">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-foreground">{lesson.title || `Aula ${index + 1}`}</h4>
+                      {lesson.progress !== undefined && (
+                        <div className="flex items-center gap-4 mt-2">
+                          <div className="flex-1 bg-brand-surface rounded-full h-2">
+                            <div
+                              className="bg-primary h-2 rounded-full transition-all"
+                              style={{ width: `${lesson.progress || 0}%` }}
+                            />
+                          </div>
+                          <span className="text-sm text-muted-foreground">{Math.round(lesson.progress || 0)}%</span>
+                        </div>
+                      )}
                     </div>
+                    {(lesson.course_id || lesson.id) && (
+                      <div className="ml-4">
+                        <Button 
+                          variant="secondary" 
+                          size="sm" 
+                          onClick={() => navigate(`/app/aula?courseId=${lesson.course_id || lesson.id}&lessonId=${lesson.lesson_id || lesson.id}`)}
+                        >
+                          Continuar
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                  <div className="ml-4">
-                    <Button variant="secondary" size="sm" onClick={() => navigate("/app/aula")}>
-                      Continuar
-                    </Button>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-muted-foreground text-center py-4">Nenhuma aula recente</p>
+              )}
             </CardContent>
           </Card>
 
@@ -163,16 +204,27 @@ export default function Homepage() {
               </Button>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {newCourses.map((course) => (
-                  <CourseCard
-                    key={course.id}
-                    {...course}
-                    duration="18h"
-                    students={89}
-                  />
-                ))}
-              </div>
+              {newCourses.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {newCourses.map((course) => {
+                    const imageUrl = getCourseImageUrl(course._id, course.image);
+                    return (
+                      <CourseCard
+                        key={course._id}
+                        id={parseInt(course._id) || 0}
+                        title={course.title}
+                        description={course.description}
+                        image={imageUrl}
+                        duration={`${course.duration}h`}
+                        students={0}
+                        onAction={() => navigate(`/app/visao-geral-curso?courseId=${course._id}`)}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-center py-4">Nenhum curso disponível</p>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -185,13 +237,21 @@ export default function Homepage() {
               <CardTitle className="text-foreground">Notícias</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {news.map((item, index) => (
-                <div key={index} className="border-b border-brand-border last:border-0 pb-4 last:pb-0">
-                  <h4 className="font-medium text-foreground mb-2">{item.title}</h4>
-                  <p className="text-sm text-muted-foreground mb-2">{item.description}</p>
-                  <p className="text-xs text-muted-foreground">{item.date}</p>
-                </div>
-              ))}
+              {isLoading ? (
+                <p className="text-muted-foreground text-center py-4">Carregando...</p>
+              ) : dashboardData?.last_news && dashboardData.last_news.length > 0 ? (
+                dashboardData.last_news.map((item: any, index: number) => (
+                  <div key={index} className="border-b border-brand-border last:border-0 pb-4 last:pb-0">
+                    <h4 className="font-medium text-foreground mb-2">{item.title}</h4>
+                    <p className="text-sm text-muted-foreground mb-2">{item.content}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {item.created_at ? new Date(item.created_at).toLocaleDateString('pt-BR') : 'Data não disponível'}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-muted-foreground text-center py-4">Nenhuma notícia disponível</p>
+              )}
             </CardContent>
           </Card>
 

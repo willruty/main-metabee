@@ -36,16 +36,33 @@ export default function Login() {
     setIsLoading(true);
     setError("");
 
+    // Validação básica
+    if (isLoginMode) {
+      if (!email || !password) {
+        setError("Por favor, preencha todos os campos");
+        setIsLoading(false);
+        return;
+      }
+    } else {
+      if (!name || !email || !password) {
+        setError("Por favor, preencha todos os campos");
+        setIsLoading(false);
+        return;
+      }
+    }
+
     const BASE_API_URL = "http://localhost:8080";
     const endpoint = isLoginMode
       ? `${BASE_API_URL}/metabee/login`
       : `${BASE_API_URL}/metabee/register`;
 
     const body = isLoginMode
-      ? { email, password }
-      : { name, email, password };
+      ? { email: email.trim(), password }
+      : { name: name.trim(), email: email.trim(), password };
 
     try {
+      console.log("Enviando requisição:", { endpoint, body });
+      
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,9 +70,10 @@ export default function Login() {
       });
 
       const data = await response.json();
+      console.log("Resposta recebida:", { status: response.status, data });
 
       if (!response.ok) {
-        throw new Error(data.error || data.err || data.message || data.erro);
+        throw new Error(data.error || data.err || data.message || data.erro || "Erro desconhecido");
       }
 
       localStorage.setItem("authToken", data.token);

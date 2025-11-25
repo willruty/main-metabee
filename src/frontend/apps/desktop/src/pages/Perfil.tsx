@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, MapPin, Calendar, Award, Book, Clock } from "lucide-react";
+import { Camera, MapPin, Calendar, Award, Book, Clock, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
 const achievements = [
@@ -38,11 +38,34 @@ export default function Perfil() {
     toast.success("Perfil atualizado com sucesso!");
   };
 
+  const handleLogout = () => {
+    // Limpar token do localStorage
+    localStorage.removeItem("authToken");
+    
+    // Limpar qualquer outro cache se necessário
+    // localStorage.clear(); // Descomente se quiser limpar tudo
+    
+    toast.success("Logout realizado com sucesso!");
+    
+    // Redirecionar para login
+    navigate("/login");
+  };
+
   return (
     <div className="p-6 space-y-8 max-w-4xl mx-auto">
       {/* Header */}
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold text-foreground">Meu Perfil</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-foreground">Meu Perfil</h1>
+          <Button
+            variant="destructive"
+            onClick={handleLogout}
+            className="flex items-center gap-2"
+          >
+            <LogOut className="h-4 w-4" />
+            Sair
+          </Button>
+        </div>
 
         {/* Profile Card */}
         <Card className="bg-brand-surface border-brand-border">

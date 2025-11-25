@@ -111,7 +111,7 @@
         "nsis",
         "portable"
       ],
-      "icon": "assets/logo.ico"
+      "icon": "electron/favicon.ico"
     },
     "nsis": {
       "oneClick": false,

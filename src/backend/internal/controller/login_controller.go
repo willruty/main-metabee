@@ -19,7 +19,13 @@ func Login(c *gin.Context) {
 
 	var input dao.LoginInput
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"erro": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Dados inválidos: " + err.Error()})
+		return
+	}
+
+	// Validar campos obrigatórios
+	if input.Email == "" || input.Password == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Email e senha são obrigatórios"})
 		return
 	}
 
@@ -28,6 +34,12 @@ func Login(c *gin.Context) {
 	var userDao dao.UserDao
 	user, err := userDao.FindUserByEmail(userDto.Email)
 	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
+		return
+	}
+
+	// Verificar se a senha está correta
+	if !userDao.CheckPasswordHash(input.Password, user.Password) {
 		c.JSON(http.StatusBadRequest, gin.H{"erro": "Email ou senha inválidos"})
 		return
 	}

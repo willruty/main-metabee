@@ -9,7 +9,7 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
-    icon: path.join(__dirname, "../build/icon.ico"), // ícone customizado
+    icon: path.join(__dirname, "favicon.ico"), // ícone customizado
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: false,

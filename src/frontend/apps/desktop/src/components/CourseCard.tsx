@@ -49,13 +49,18 @@ export function CourseCard({
   }
 
   return (
-    <Card className="bg-brand-surface border-brand-border hover:bg-brand-surface-hover transition-all duration-300 group overflow-hidden">
-      <CardHeader className="p-0">
+    <Card className="bg-brand-surface border-brand-border hover:bg-brand-surface-hover transition-all duration-300 group overflow-hidden flex flex-col h-[420px]">
+      <CardHeader className="p-0 flex-shrink-0">
         <div className="relative overflow-hidden rounded-t-lg">
           <img
             src={image}
             alt={title}
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={(e) => {
+              // Fallback para imagem placeholder se a imagem não carregar
+              const target = e.target as HTMLImageElement;
+              target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect fill='%23ddd' width='400' height='200'/%3E%3Ctext fill='%23999' font-family='sans-serif' font-size='18' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3ESem imagem%3C/text%3E%3C/svg%3E";
+            }}
           />
           {progress !== undefined && (
             <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2">
@@ -71,15 +76,15 @@ export function CourseCard({
         </div>
       </CardHeader>
 
-      <CardContent className="p-4">
+      <CardContent className="p-4 flex-1 flex flex-col">
         <h3 className="font-semibold text-lg mb-2 text-foreground group-hover:text-primary transition-colors">
           {title}
         </h3>
-        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+        <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-1">
           {description}
         </p>
 
-        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+        <div className="flex items-center gap-4 text-xs text-muted-foreground mt-auto">
           <div className="flex items-center gap-1">
             <Clock className="h-3 w-3" />
             <span>{duration}</span>
@@ -91,7 +96,7 @@ export function CourseCard({
         </div>
       </CardContent>
 
-      <CardFooter className="p-4 pt-0">
+      <CardFooter className="p-4 pt-0 flex-shrink-0">
         <Button
           className="w-full"
           variant={type === "owned" ? "secondary" : "default"}
