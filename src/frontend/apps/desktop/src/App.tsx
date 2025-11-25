@@ -21,48 +21,60 @@ import Configuracoes from "./pages/Configuracoes";
 import NotFound from "./pages/NotFound";
 import VisaoGeralCurso from "./pages/VisaoGeralCurso";
 import Checkout from "./pages/Checkout";
+import { useTheme } from "./hooks/useTheme";
+import { TitleBar } from "./components/TitleBar";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/app/*" element={
-            <SidebarProvider>
-              <div className="flex min-h-screen w-full">
-                <AppSidebar />
-                <main className="flex-1 overflow-auto">
-                  <Routes>
-                    <Route path="/homepage" element={<Homepage />} />
-                    <Route path="/meus-cursos" element={<MeusCursos />} />
-                    <Route path="/visao-geral" element={<Modulos />} />
-                    <Route path="/aula" element={<Aula />} />
-                    <Route path="/marketplace" element={<Marketplace />} />
-                    <Route path="/noticias" element={<Noticias />} />
-                    <Route path="/materia/:id" element={<Materia />} />
-                    <Route path="/simulador-3d" element={<Simulador3D />} />
-                    <Route path="/ia" element={<ChatIa />} />
-                    <Route path="/downloads" element={<Downloads />} />
-                    <Route path="/visao-geral-curso" element={<VisaoGeralCurso />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/perfil" element={<Perfil />} />
-                    <Route path="/configuracoes" element={<Configuracoes />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </main>
-              </div>
-            </SidebarProvider>
-          } />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+// Componente wrapper para aplicar tema
+function AppWithTheme() {
+  useTheme(); // Aplicar tema ao carregar
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/app/*" element={
+              <SidebarProvider>
+                <div className="flex flex-col min-h-screen w-full">
+                  <TitleBar />
+                  <div className="flex flex-1 overflow-hidden mt-9">
+                    <AppSidebar />
+                    <main className="flex-1 overflow-auto">
+                    <Routes>
+                      <Route path="/homepage" element={<Homepage />} />
+                      <Route path="/meus-cursos" element={<MeusCursos />} />
+                      <Route path="/visao-geral" element={<Modulos />} />
+                      <Route path="/aula" element={<Aula />} />
+                      <Route path="/marketplace" element={<Marketplace />} />
+                      <Route path="/noticias" element={<Noticias />} />
+                      <Route path="/materia/:id" element={<Materia />} />
+                      <Route path="/simulador-3d" element={<Simulador3D />} />
+                      <Route path="/ia" element={<ChatIa />} />
+                      <Route path="/downloads" element={<Downloads />} />
+                      <Route path="/visao-geral-curso" element={<VisaoGeralCurso />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/perfil" element={<Perfil />} />
+                      <Route path="/configuracoes" element={<Configuracoes />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                    </main>
+                  </div>
+                </div>
+              </SidebarProvider>
+            } />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+const App = () => <AppWithTheme />;
 
 export default App;

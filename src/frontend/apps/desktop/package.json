@@ -3,11 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "main": "electron/main.ts",
+  "main": "dist_electron/main.cjs",
   "desktop": "npm run build && electron .",
   "scripts": {
-    "build:electron": "tsc -p tsconfig.electron.json",
-    "dev": "concurrently \"cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\" \"vite\"",
+    "build:electron": "tsc -p tsconfig.electron.json && node scripts/rename-electron-files.cjs",
+    "dev": "npm run build:electron && concurrently \"cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\" \"vite\"",
     "build": "vite build && npm run build:electron",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -103,7 +103,7 @@
     },
     "files": [
       "dist/**/*",
-      "electron/**/*",
+      "dist_electron/**/*",
       "package.json"
     ],
     "win": {

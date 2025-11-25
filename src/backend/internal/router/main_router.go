@@ -88,12 +88,6 @@ func SetupMainRouter() *gin.Engine {
 		main.GET("/news/:id/image", controller.GetNewsImage)       // GET /metabee/news/:id/image
 		main.GET("/news/:id", controller.GetNewsByID)              // GET /metabee/news/:id
 		main.GET("/news", controller.GetAllNews)                   // GET /metabee/news
-		
-		log.Println("✅ Rotas de NEWS registradas:")
-		log.Println("   GET /metabee/news")
-		log.Println("   GET /metabee/news/last")
-		log.Println("   GET /metabee/news/:id")
-		log.Println("   GET /metabee/news/:id/image")
 
 		// ============================================
 		// Rotas Autenticadas
@@ -103,6 +97,10 @@ func SetupMainRouter() *gin.Engine {
 		user.Use(middleware.AuthMiddleware)
 		{
 			user.GET("auth/validate", controller.ValidateToken)
+			user.GET("/profile", controller.GetProfile)              // GET /metabee/user/profile
+			user.GET("/profile/image", controller.GetProfileImage)   // GET /metabee/user/profile/image
+			user.PUT("/profile", controller.UpdateProfile)           // PUT /metabee/user/profile
+			user.POST("/profile/image", controller.UpdateProfileImage) // POST /metabee/user/profile/image
 		}
 
 		// Dashboard

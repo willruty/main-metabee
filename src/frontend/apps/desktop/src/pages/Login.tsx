@@ -10,6 +10,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { TitleBar } from "@/components/TitleBar";
 import logo from "../assets/logo-removebg-preview.png";
 
 export default function Login() {
@@ -76,8 +77,21 @@ export default function Login() {
         throw new Error(data.error || data.err || data.message || data.erro || "Erro desconhecido");
       }
 
+      // Verificar se o token foi retornado
+      if (!data.token) {
+        throw new Error("Token não recebido do servidor");
+      }
+      
+      // Salvar token no localStorage
       localStorage.setItem("authToken", data.token);
-      console.log(data.token);
+      console.log("✅ Token salvo no localStorage:", data.token ? "Token presente" : "Token ausente");
+      
+      // Verificar se foi salvo corretamente
+      const savedToken = localStorage.getItem("authToken");
+      console.log("✅ Token verificado após salvar:", savedToken ? "Token encontrado" : "Token não encontrado");
+      
+      // Pequeno delay para garantir que o localStorage foi atualizado
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       navigate("/app/homepage");
     } catch (err: any) {
@@ -88,8 +102,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md bg-brand-surface border-brand-border">
+    <div className="min-h-screen flex flex-col bg-background">
+      <TitleBar />
+      <div className="flex-1 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-brand-surface border-brand-border">
         <CardHeader className="text-center space-y-2">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 rounded-xl flex items-center justify-center">
@@ -187,6 +203,7 @@ export default function Login() {
           </div>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }

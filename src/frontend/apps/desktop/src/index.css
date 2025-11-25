@@ -21,7 +21,7 @@ All colors MUST be HSL.
     --brand-border: 45 8% 15%;
     --brand-input-bg: 45 8% 10%;
 
-    /* Theme mapping */
+    /* Theme mapping - Dark (default) */
     --background: 45 8% 5%;
     --foreground: 240 100% 99%;
 
@@ -61,6 +61,53 @@ All colors MUST be HSL.
     --sidebar-border: 45 8% 15%;
     --sidebar-ring: 45 100% 50%;
   }
+
+  :root[data-theme="light"] {
+    /* Theme mapping - Light */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 98%;
+    --popover-foreground: 0 0% 10%;
+
+    --primary: 45 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 267 100% 25%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 45 100% 50%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 96%;
+    --ring: 45 100% 50%;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 45 100% 50%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 45 100% 50%;
+
+    /* Brand colors for light theme */
+    --brand-background: 0 0% 100%;
+    --brand-surface: 0 0% 98%;
+    --brand-surface-hover: 0 0% 95%;
+    --brand-border: 0 0% 90%;
+    --brand-input-bg: 0 0% 96%;
+  }
 }
 
 @layer base {
@@ -86,6 +133,10 @@ All colors MUST be HSL.
   border-radius: 5px;
 }
 
+:root[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
 ::-webkit-scrollbar-thumb {
   background-color: #ffa909;
   /* cor do "dedo" da barra */
@@ -94,7 +145,20 @@ All colors MUST be HSL.
   /* espaço entre o "dedo" e o track */
 }
 
+:root[data-theme="light"] ::-webkit-scrollbar-thumb {
+  border: 2px solid #f5f5f5;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background-color: #f7b538;
   /* cor ao passar o mouse */
+}
+
+/* Estilos para a barra de título customizada */
+.drag-region {
+  -webkit-app-region: drag;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
 }

@@ -19,8 +19,11 @@ import {
   Monitor
 } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "@/hooks/useTheme";
 
 export default function Configuracoes() {
+  const { theme, setTheme } = useTheme();
+  
   const [settings, setSettings] = useState({
     notifications: {
       courseUpdates: true,
@@ -34,7 +37,7 @@ export default function Configuracoes() {
       analyticsEnabled: true
     },
     appearance: {
-      theme: "dark",
+      theme: theme,
       language: "pt-BR",
       fontSize: [14],
       animationsEnabled: true
@@ -50,6 +53,14 @@ export default function Configuracoes() {
       autoDownload: false
     }
   });
+
+  // Sincronizar tema do hook com settings
+  useEffect(() => {
+    setSettings(prev => ({
+      ...prev,
+      appearance: { ...prev.appearance, theme }
+    }));
+  }, [theme]);
 
   const handleSave = () => {
     toast.success("Configurações salvas com sucesso!");
@@ -72,7 +83,52 @@ export default function Configuracoes() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="notifications" className="space-y-6">
+      <Tabs defaultValue="appearance" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4 bg-brand-surface">
+          <TabsTrigger value="appearance">Aparência</TabsTrigger>
+          <TabsTrigger value="notifications">Notificações</TabsTrigger>
+          <TabsTrigger value="privacy">Privacidade</TabsTrigger>
+          <TabsTrigger value="storage">Armazenamento</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="appearance" className="space-y-6">
+          <Card className="bg-brand-surface border-brand-border">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Monitor className="h-5 w-5" />
+                Configurações de Aparência
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label>Tema</Label>
+                  <Select 
+                    value={settings.appearance.theme}
+                    onValueChange={(value) => {
+                      setTheme(value as "light" | "dark" | "auto");
+                      setSettings(prev => ({
+                        ...prev,
+                        appearance: { ...prev.appearance, theme: value as "light" | "dark" | "auto" }
+                      }));
+                      toast.success("Tema alterado com sucesso!");
+                    }}
+                  >
+                    <SelectTrigger className="bg-brand-input-bg border-brand-border">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="dark">Escuro</SelectItem>
+                      <SelectItem value="light">Claro</SelectItem>
+                      <SelectItem value="auto">Automático</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="notifications" className="space-y-6">
           <Card className="bg-brand-surface border-brand-border">
             <CardHeader>
@@ -149,35 +205,93 @@ export default function Configuracoes() {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="privacy" className="space-y-6">
           <Card className="bg-brand-surface border-brand-border">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Monitor className="h-5 w-5" />
-                Configurações de Aparência
+                <Shield className="h-5 w-5" />
+                Privacidade
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label>Tema</Label>
-                  <Select value={settings.appearance.theme}>
-                    <SelectTrigger className="bg-brand-input-bg border-brand-border">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="dark">Escuro</SelectItem>
-                      <SelectItem value="light">Claro</SelectItem>
-                      <SelectItem value="auto">Automático</SelectItem>
-                    </SelectContent>
-                  </Select>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium text-foreground">Perfil Público</h3>
+                    <p className="text-sm text-muted-foreground">Permitir que outros vejam seu perfil</p>
+                  </div>
+                  <Switch
+                    checked={settings.privacy.profileVisible}
+                    onCheckedChange={(checked) =>
+                      setSettings({
+                        ...settings,
+                        privacy: { ...settings.privacy, profileVisible: checked }
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium text-foreground">Progresso Visível</h3>
+                    <p className="text-sm text-muted-foreground">Mostrar seu progresso nos cursos</p>
+                  </div>
+                  <Switch
+                    checked={settings.privacy.progressVisible}
+                    onCheckedChange={(checked) =>
+                      setSettings({
+                        ...settings,
+                        privacy: { ...settings.privacy, progressVisible: checked }
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium text-foreground">Analytics</h3>
+                    <p className="text-sm text-muted-foreground">Compartilhar dados para melhorar a experiência</p>
+                  </div>
+                  <Switch
+                    checked={settings.privacy.analyticsEnabled}
+                    onCheckedChange={(checked) =>
+                      setSettings({
+                        ...settings,
+                        privacy: { ...settings.privacy, analyticsEnabled: checked }
+                      })
+                    }
+                  />
                 </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="appearance" className="space-y-6">
-
+        <TabsContent value="storage" className="space-y-6">
+          <Card className="bg-brand-surface border-brand-border">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <HardDrive className="h-5 w-5" />
+                Armazenamento
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium text-foreground">Tamanho do Cache</h3>
+                    <p className="text-sm text-muted-foreground">{settings.storage.cacheSize}</p>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={clearCache}>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Limpar Cache
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 

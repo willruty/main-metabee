@@ -21,7 +21,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import logo from "@/assets/logo-removebg-preview.png";
 
 const mainItems = [
   { title: "Homepage", url: "/app/homepage", icon: Home },
@@ -72,29 +71,13 @@ export function AppSidebar() {
       onMouseLeave={handleMouseLeave}
     >
       <SidebarContent className="flex flex-col h-full overflow-hidden">
-        {/* Logo */}
-        <div className="p-4 border-b border-sidebar-border">
-          <div className="flex items-center gap-3">
-            <img
-              src={logo}
-              alt="MetaStation Logo"
-              className="w-8 h-8 rounded-lg object-contain"
-            />
-            {(!collapsed || isHovered) && (
-              <div className="text-lg font-bold text-primary">
-                MetaStation
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* Main Navigation */}
         <div className="flex-1 py-4">
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu>
-                {mainItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+              <SidebarMenu className="space-y-3">
+                {mainItems.map((item, index) => (
+                  <SidebarMenuItem key={item.title} className={index === 0 ? "mt-4" : "mt-3"}>
                     <SidebarMenuButton asChild>
                       <NavLink
                         to={item.url}
@@ -125,9 +108,9 @@ export function AppSidebar() {
         <div className="border-t border-sidebar-border py-4 overflow-hidden">
           <SidebarGroup>
             <SidebarGroupContent>
-              <SidebarMenu>
-                {bottomItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+              <SidebarMenu className="space-y-3">
+                {bottomItems.map((item, index) => (
+                  <SidebarMenuItem key={item.title} className={index === 0 ? "mt-4" : "mt-3"}>
                     <SidebarMenuButton asChild>
                       <NavLink
                         to={item.url}

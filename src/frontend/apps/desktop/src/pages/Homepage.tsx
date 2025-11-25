@@ -45,6 +45,16 @@ export default function Homepage() {
     const loadDashboardData = async () => {
       try {
         setIsLoading(true);
+        setError(null); // Limpar erro anterior
+        
+        // Verificar se o token existe antes de fazer a requisição
+        const token = localStorage.getItem("authToken");
+        console.log("🔍 Homepage: Verificando token...", token ? "Token encontrado" : "Token não encontrado");
+        
+        if (!token) {
+          throw new Error("Token não encontrado. Faça login novamente.");
+        }
+        
         const data = await fetchDashboardData();
         setDashboardData(data);
         setUserName(data.user_name || "Usuário");
